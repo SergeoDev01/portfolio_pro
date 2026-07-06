@@ -5,7 +5,7 @@ import { useInView } from "@/hooks/useInView";
 
 export function LazyImage({
   src, alt, className = "", priority = false,
-  sizes = "(max-width: 768px) 100vw, 50vw",
+  sizes = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
 }: {
   src: string; alt: string; className?: string;
   priority?: boolean; sizes?: string;

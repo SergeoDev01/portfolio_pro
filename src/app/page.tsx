@@ -5,6 +5,7 @@ import { Sidebar, navItems, getNavIcon } from "@/components/Sidebar";
 import { projects } from "@/data/projects";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
 import { ProjectCarousel } from "@/components/ProjectCarousel";
 import { Carousel } from "@/components/application/carousel/carousel-base";
 import { CheckCircle2, Menu, X, PaintBucket, Pin, Play } from "lucide-react";
@@ -220,8 +221,10 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
 
-  // Collecter toutes les images de carrousel de tous les projets
-  const allCarouselImages = projects.flatMap((p) => p.images || []);
+  // Collecter toutes les images de carrousel de tous les projets sans doublons
+  const allCarouselImages = useMemo(() => 
+    [...new Set(projects.flatMap((p) => p.images || []))], 
+  []);
 
   // Précharger 1.5s après le mount
   usePreloadImages(allCarouselImages, 1500);
