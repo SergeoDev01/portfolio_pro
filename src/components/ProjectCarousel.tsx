@@ -109,15 +109,6 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   const isOpen = !!project && (images.length > 0 || isVideo);
 
   useEffect(() => {
-    if (project?.images) {
-      project.images.forEach((src) => {
-        const img = new window.Image();
-        img.src = src;
-      });
-    }
-  }, [project?.images]);
-
-  useEffect(() => {
     if (!isVideo && images[activeIndex]) updateColor(images[activeIndex]);
   }, [activeIndex, images, updateColor, isVideo]);
 
@@ -228,16 +219,13 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                           transition: "background-color 0.5s ease",
                         }}
                       >
-                        {Math.abs(i - activeIndex) <= 1 ? (
-                          <LazyImage
-                            src={img}
-                            alt={`${project!.title} — image ${i + 1}`}
-                            className="absolute inset-0 w-full h-full"
-                            priority={i === activeIndex}
-                          />
-                        ) : (
-                          <div className="absolute inset-0 bg-[#1D0101]/20 animate-pulse" />
-                        )}
+                        <img
+                          src={img}
+                          alt={`${project!.title} — image ${i + 1}`}
+                          draggable={false}
+                          onDragStart={(e) => e.preventDefault()}
+                          className="absolute inset-0 w-full h-full object-cover object-center"
+                        />
                       </Carousel.Item>
                     ))}
                   </Carousel.Content>

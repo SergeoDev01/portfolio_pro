@@ -10,6 +10,7 @@ import { Carousel } from "@/components/application/carousel/carousel-base";
 import { CheckCircle2, Menu, X, PaintBucket, Pin, Play } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { usePreloadImages } from "@/hooks/usePreloadImages";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -209,10 +210,21 @@ const ServiceItem = ({ num, title, tags, description }: any) => {
   ); 
 };
 
+// Les 2-3 premières images du carrousel BingooBank préchargées via <link>
+const criticalCarouselImages = projects
+  .find(p => p.slug === "bingoobank")
+  ?.images?.slice(0, 3) ?? [];
+
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
+
+  // Collecter toutes les images de carrousel de tous les projets
+  const allCarouselImages = projects.flatMap((p) => p.images || []);
+
+  // Précharger 1.5s après le mount
+  usePreloadImages(allCarouselImages, 1500);
 
   const categories = ["Tous", ...Array.from(new Set(projects.map(p => p.category)))];
   
@@ -246,9 +258,13 @@ export default function Home() {
   }, [isMobileMenuOpen]);
 
   return (
-    <div className="min-h-[100dvh] bg-[var(--color-bg-tint)] font-sans">
-      
-      {/* Floating Hamburger Button for Mobile */}
+    <>
+      {criticalCarouselImages.map((src) => (
+        <link key={src} rel="preload" as="image" href={src} />
+      ))}
+      <div className="min-h-[100dvh] bg-[var(--color-bg-tint)] font-sans">
+        
+        {/* Floating Hamburger Button for Mobile */}
       <button 
         onClick={() => setIsMobileMenuOpen(true)} 
         className="fixed top-4 right-4 z-40 lg:hidden bg-[var(--color-dark)] text-white p-2.5 rounded-full shadow-lg hover:text-[var(--color-accent)] transition-all"
@@ -547,5 +563,6 @@ export default function Home() {
         onClose={() => setSelectedProject(null)} 
       />
     </div>
+    </>
   );
 }
