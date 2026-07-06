@@ -9,6 +9,7 @@ export function LazyImage({
   alt,
   className = "",
   priority = false,
+  fetchPriority = "auto",
   sizes = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
 }: {
   src: string;
@@ -16,6 +17,7 @@ export function LazyImage({
   alt: string;
   className?: string;
   priority?: boolean;
+  fetchPriority?: "high" | "low" | "auto";
   sizes?: string;
 }) {
   const { ref, inView } = useInView();
@@ -51,6 +53,7 @@ export function LazyImage({
           sizes={sizes}
           quality={80}
           priority={priority}
+          fetchPriority={fetchPriority}
           loading={priority ? "eager" : "lazy"}
           className={`object-cover object-center transition-opacity duration-500
                       ${loaded ? "opacity-100" : "opacity-0"}`}
