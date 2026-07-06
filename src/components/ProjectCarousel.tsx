@@ -108,6 +108,15 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   const isOpen = !!project && (images.length > 0 || isVideo);
 
   useEffect(() => {
+    if (project?.images) {
+      project.images.forEach((src) => {
+        const img = new window.Image();
+        img.src = src;
+      });
+    }
+  }, [project?.images]);
+
+  useEffect(() => {
     if (!isVideo && images[activeIndex]) updateColor(images[activeIndex]);
   }, [activeIndex, images, updateColor, isVideo]);
 

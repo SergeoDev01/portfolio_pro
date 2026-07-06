@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 const APROPOS_PNG_RATIO = 816 / 1456;
 const HAND_LINE_PERCENT = 0.78;
@@ -67,9 +68,13 @@ export function AProposSection() {
            style={{ paddingTop: `${440 * APROPOS_PNG_RATIO * HAND_LINE_PERCENT}px` }}>
 
         {/* PNG draggable en DEV */}
-        <img
+        <Image
           src="/images/a_propos.png"
           alt="Sergeo Limta"
+          width={460}
+          height={260}
+          quality={90}
+          priority
           draggable={false}
           onMouseDown={handleMouseDown}
           style={{
@@ -85,6 +90,7 @@ export function AProposSection() {
             cursor: DEV_POSITION ? (dragging ? "grabbing" : "grab") : "default",
             userSelect: "none",
           }}
+          className="pointer-events-none object-contain"
         />
 
         {/* Card */}

@@ -116,9 +116,11 @@ export function Sidebar() {
           <Image
             src="/avatar.png"
             alt="Sergeo Limta"
-            fill
-            className="object-cover"
-            unoptimized
+            width={150}
+            height={150}
+            quality={85}
+            priority
+            className="object-cover w-full h-full"
           />
         </div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
