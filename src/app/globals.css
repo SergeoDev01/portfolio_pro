@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #E6C200;
+  --color-accent: #FFD700;
+  --color-bg-tint: #FFF2AF;
+  --color-dark: #1D0101;
+  --color-verified: #1D9BF0;
+  --radius-card: 1.25rem;
+  
+  --font-sans: "Satoshi", "Geist", "Inter", sans-serif;
+  --font-company: "Company", sans-serif;
+  --background: var(--color-bg-tint);
+  --foreground: var(--color-dark);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom Utilities for Scroll-Spy offsets if needed */
+html {
+  scroll-padding-top: 20px;
+}
