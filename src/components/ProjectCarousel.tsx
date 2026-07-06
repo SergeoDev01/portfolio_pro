@@ -54,7 +54,6 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   const [api, setApi] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [bgColor, setBgColor] = useState<string>("#111111");
-  const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const colorCache = useRef<Record<string, string>>({});
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -80,7 +79,6 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   useEffect(() => {
     setActiveIndex(0);
     setBgColor("#111111");
-    setLoaded({});
     // Auto-play video when modal opens
     if (isVideo && videoRef.current) {
       videoRef.current.play().catch(() => {});
@@ -105,6 +103,15 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   useEffect(() => {
     if (!isVideo && images[activeIndex]) updateColor(images[activeIndex].src);
   }, [activeIndex, images, updateColor, isVideo]);
+
+  useEffect(() => {
+    if (isVideo || images.length === 0) return;
+
+    images.forEach(({ src }) => {
+      const preloadImage = new window.Image();
+      preloadImage.src = src;
+    });
+  }, [images, isVideo]);
 
   // Listen to carousel API for slide changes
   useEffect(() => {
@@ -218,12 +225,9 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                           alt={`${project!.title} — image ${i + 1}`}
                           draggable={false}
                           onDragStart={(e) => e.preventDefault()}
-                          onLoad={() => setLoaded(prev => ({ ...prev, [i]: true }))}
                           className="absolute inset-0 w-full h-full object-contain object-center"
-                          style={{ 
-                            transition: "opacity 0.3s ease",
-                            opacity: loaded[i] ? 1 : 0
-                          }}
+                          loading={i === 0 ? "eager" : "lazy"}
+                          decoding="async"
                         />
                       </Carousel.Item>
                     ))}

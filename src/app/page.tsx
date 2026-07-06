@@ -1,34 +1,42 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Sidebar, navItems, getNavIcon } from "@/components/Sidebar";
 import { projects } from "@/data/projects";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
+import { ProjectCarousel } from "@/components/ProjectCarousel";
 import { Carousel } from "@/components/application/carousel/carousel-base";
-import { CheckCircle2, Menu, X, PaintBucket, Pin } from "lucide-react";
+import { CheckCircle2, Menu, X, PaintBucket, Pin, Play } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { usePreloadImages } from "@/hooks/usePreloadImages";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+// Custom Icons representing user's specific designs
+function CustomEnvelope({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M 2 8 L 12 2.5 L 22 8 L 22 10.5 L 12 14 L 2 10.5 Z" />
+      <path d="M 2 13 L 12 16.5 L 22 13 L 22 22 L 2 22 Z" />
+    </svg>
+  );
+}
+
+
+
 import { LazyImage } from "@/components/LazyImage";
 import { LazyVideo } from "@/components/LazyVideo";
 import { ProjectImage } from "@/data/projects";
+
 const SPRING_CONFIG = { type: "spring", stiffness: 100, damping: 20 } as const;
 
 // Component for the bento card manual slideshow (preview using untitledui Carousel)
-const BentoCardSlideshow = ({
-  images,
-  priority = false,
-  sizes = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
-}: {
-  images: ProjectImage[];
-  priority?: boolean;
-  sizes?: string;
-}) => {
+const BentoCardSlideshow = ({ images }: { images: ProjectImage[] }) => {
   const [api, setApi] = useState<any>(null);
 
   return (
@@ -42,12 +50,10 @@ const BentoCardSlideshow = ({
             <Carousel.Item key={i} className="h-full w-full overflow-hidden relative">
               <LazyImage
                 src={img.src}
-                blur={img.blur}
                 alt=""
-                sizes={sizes}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="w-full h-full"
-                priority={priority && i === 0}
-                fetchPriority={priority && i === 0 ? "high" : "auto"}
+                priority={i === 0}
               />
             </Carousel.Item>
           ))}
@@ -59,12 +65,9 @@ const BentoCardSlideshow = ({
 
 import { AProposSection } from "@/components/AProposSection";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { CopyEmail } from "@/components/CopyEmail";
 import { MarkerHighlight } from "@/components/MarkerHighlight";
-const Footer = dynamic(() => import("./sections/Footer"));
-const ProjectCarousel = dynamic(
-  () => import("@/components/ProjectCarousel").then((mod) => mod.ProjectCarousel),
-  { ssr: false }
-);
+import Footer from "./sections/Footer";
 
 const services = [ 
   { 
@@ -209,10 +212,25 @@ const ServiceItem = ({ num, title, tags, description }: any) => {
   ); 
 };
 
+// Les 2-3 premières images du carrousel BingooBank préchargées via <link>
+const criticalCarouselImages = (projects
+  .find(p => p.slug === "bingoobank")
+  ?.images?.slice(0, 3) || []).map(img => img.src);
+
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
+
+  // Collecter toutes les images de carrousel de tous les projets sans doublons
+  const allCarouselImages = useMemo(() => 
+    [...new Set(projects.flatMap((p) => p.images?.map(img => img.src) || []))], 
+  []);
+
+  console.log("Images à précharger:", allCarouselImages.length, allCarouselImages); 
+  
+  // Précharger 1.5s après le mount
+  usePreloadImages(allCarouselImages, 1500);
 
   const categories = ["Tous", ...Array.from(new Set(projects.map(p => p.category)))];
   
@@ -225,9 +243,6 @@ export default function Home() {
     projects.find(p => p.slug === "aeron-logo"),
     projects.find(p => p.slug === "qda"),
   ].filter(Boolean) as typeof projects;
-  const criticalProjectImages = pinnedProjects
-    .map((project) => project.images?.[0]?.src)
-    .filter(Boolean) as string[];
 
   // Scroll to section and close mobile menu
   const handleNavClick = (href: string) => {
@@ -250,7 +265,7 @@ export default function Home() {
 
   return (
     <>
-      {criticalProjectImages.map((src) => (
+      {criticalCarouselImages.map((src) => (
         <link key={src} rel="preload" as="image" href={src} />
       ))}
       <div className="min-h-[100dvh] bg-[var(--color-bg-tint)] font-sans">
@@ -381,25 +396,19 @@ export default function Home() {
             </div>
           </div>
 
-        </section>
-
-        <AProposSection />
-
-        <section className="px-6 lg:px-12 pb-16 lg:pb-24">
-          <div className="flex items-center gap-2 mb-6 text-[var(--color-dark)]/70 uppercase tracking-widest text-xs lg:text-sm font-bold">
+          {/* Subtitle "Projets épinglés" */}
+          <div className="flex items-center gap-2 mb-6 mt-12 text-[var(--color-dark)]/70 uppercase tracking-widest text-xs lg:text-sm font-bold">
             <Pin className="w-4 h-4 transform rotate-45" />
             <span>Projets épinglés</span>
           </div>
 
+          {/* Pinned Bento Grid (3 projects: BingooBank, Projet 2, Projet 3) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
             {pinnedProjects.map((p, index) => {
               const isVedette = index === 0;
               const bentoClass = isVedette
                 ? "col-span-1 md:col-span-2 md:row-span-2 aspect-square"
                 : "col-span-1 aspect-square";
-              const cardSizes = isVedette
-                ? "(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 66vw"
-                : "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw";
 
               return (
                 <motion.div
@@ -420,23 +429,17 @@ export default function Home() {
                   )}
                 >
                   {p.images && p.images.length > 1 ? (
-                    <BentoCardSlideshow
-                      images={p.images}
-                      priority={index < 3}
-                      sizes={cardSizes}
-                    />
+                    <BentoCardSlideshow images={p.images} />
                   ) : (
-                    <LazyImage
-                      src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`}
-                      blur={p.images && p.images.length > 0 ? p.images[0].blur : undefined}
-                      alt={p.title}
-                      sizes={cardSizes}
+                    <LazyImage 
+                      src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
+                      alt={p.title} 
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="absolute inset-0 w-full h-full"
-                      priority={index < 3}
-                      fetchPriority={index < 3 ? "high" : "auto"}
                     />
                   )}
-
+                  
+                  {/* Pin Icon */}
                   <div className={cn(
                     "absolute top-3 right-3 bg-[var(--color-dark)]/60 text-[var(--color-accent)] p-2 rounded-lg flex items-center justify-center z-20 backdrop-blur-sm",
                     isVedette && "p-3 bg-[var(--color-dark)]/80"
@@ -444,6 +447,7 @@ export default function Home() {
                     <Pin className={cn("transform rotate-45 text-[var(--color-accent)]", isVedette ? "w-5 h-5" : "w-3.5 h-3.5")} />
                   </div>
 
+                  {/* Bottom Gradient Overlay */}
                   <div className={cn(
                     "absolute inset-0 bg-gradient-to-t from-[var(--color-dark)]/90 via-[var(--color-dark)]/30 to-transparent flex flex-col justify-end p-4 lg:p-6 z-10",
                     isVedette && "lg:p-8"
@@ -465,6 +469,24 @@ export default function Home() {
               );
             })}
           </div>
+        </section>
+
+        <AProposSection />
+
+        {/* SERVICES SECTION */}
+        <section id="services" className="px-6 lg:px-12 py-16"> 
+        
+          {/* Titre de section */} 
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1D0101]/40 mb-12"> 
+            Services 
+          </p> 
+        
+          {/* Liste */} 
+          <div className="flex flex-col"> 
+            {services.map((s, i) => ( 
+              <ServiceItem key={s.num} {...s} />
+            ))} 
+          </div> 
         </section>
 
         {/* PROJETS SECTION (GALERIE COMPLÈTE) */}
@@ -494,7 +516,7 @@ export default function Home() {
           {/* Gallery Grid */}
           <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <AnimatePresence>
-              {filteredProjects.map((p, index) => {
+              {filteredProjects.map((p) => {
                 const isVideoProject = !!(p as any).video;
                 return (
                   <motion.div
@@ -516,12 +538,9 @@ export default function Home() {
                     ) : (
                       <LazyImage 
                         src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
-                        blur={p.images && p.images.length > 0 ? p.images[0].blur : undefined}
                         alt={p.title} 
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="absolute inset-0 w-full h-full"
-                        priority={index < 4}
-                        fetchPriority={index < 4 ? "high" : "auto"}
                       />
                     )}
                     
@@ -539,22 +558,6 @@ export default function Home() {
               })}
             </AnimatePresence>
           </motion.div>
-        </section>
-
-        {/* SERVICES SECTION */}
-        <section id="services" className="px-6 lg:px-12 py-16"> 
-        
-          {/* Titre de section */} 
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1D0101]/40 mb-12"> 
-            Services 
-          </p> 
-        
-          {/* Liste */} 
-          <div className="flex flex-col"> 
-            {services.map((s) => ( 
-              <ServiceItem key={s.num} {...s} />
-            ))} 
-          </div> 
         </section>
 
         {/* FOOTER */}
