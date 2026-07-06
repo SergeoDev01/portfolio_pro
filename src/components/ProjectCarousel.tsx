@@ -213,16 +213,6 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                           transition: "background-color 0.5s ease",
                         }}
                       >
-                        {/* LQIP Blur placeholder behind the actual image */}
-                        {img.blur && !loaded[i] && (
-                          <img
-                            src={img.blur}
-                            alt=""
-                            aria-hidden="true"
-                            className="absolute inset-0 w-full h-full object-contain scale-110"
-                            style={{ filter: "blur(20px)" }}
-                          />
-                        )}
                         <img
                           src={img.src}
                           alt={`${project!.title} — image ${i + 1}`}
@@ -231,9 +221,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                           onLoad={() => setLoaded(prev => ({ ...prev, [i]: true }))}
                           className="absolute inset-0 w-full h-full object-contain object-center"
                           style={{ 
-                            filter: loaded[i] ? "blur(0px)" : "blur(15px)", 
-                            transform: loaded[i] ? "scale(1)" : "scale(1.05)", 
-                            transition: "filter 0.5s ease, transform 0.5s ease, opacity 0.5s ease",
+                            transition: "opacity 0.3s ease",
                             opacity: loaded[i] ? 1 : 0
                           }}
                         />
