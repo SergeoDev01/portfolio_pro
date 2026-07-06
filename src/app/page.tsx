@@ -226,6 +226,8 @@ export default function Home() {
     [...new Set(projects.flatMap((p) => p.images || []))], 
   []);
 
+  console.log("Images à précharger:", allCarouselImages.length, allCarouselImages); 
+  
   // Précharger 1.5s après le mount
   usePreloadImages(allCarouselImages, 1500);
 
