@@ -31,11 +31,12 @@ function CustomEnvelope({ className }: { className?: string }) {
 
 import { LazyImage } from "@/components/LazyImage";
 import { LazyVideo } from "@/components/LazyVideo";
+import { ProjectImage } from "@/data/projects";
 
 const SPRING_CONFIG = { type: "spring", stiffness: 100, damping: 20 } as const;
 
 // Component for the bento card manual slideshow (preview using untitledui Carousel)
-const BentoCardSlideshow = ({ images }: { images: string[] }) => {
+const BentoCardSlideshow = ({ images }: { images: ProjectImage[] }) => {
   const [api, setApi] = useState<any>(null);
 
   return (
@@ -48,7 +49,8 @@ const BentoCardSlideshow = ({ images }: { images: string[] }) => {
           {images.map((img, i) => (
             <Carousel.Item key={i} className="h-full w-full overflow-hidden relative">
               <LazyImage
-                src={img}
+                src={img.src}
+                blur={img.blur}
                 alt=""
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="w-full h-full"
@@ -212,9 +214,9 @@ const ServiceItem = ({ num, title, tags, description }: any) => {
 };
 
 // Les 2-3 premières images du carrousel BingooBank préchargées via <link>
-const criticalCarouselImages = projects
+const criticalCarouselImages = (projects
   .find(p => p.slug === "bingoobank")
-  ?.images?.slice(0, 3) ?? [];
+  ?.images?.slice(0, 3) || []).map(img => img.src);
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Tous");
@@ -223,7 +225,7 @@ export default function Home() {
 
   // Collecter toutes les images de carrousel de tous les projets sans doublons
   const allCarouselImages = useMemo(() => 
-    [...new Set(projects.flatMap((p) => p.images || []))], 
+    [...new Set(projects.flatMap((p) => p.images?.map(img => img.src) || []))], 
   []);
 
   console.log("Images à précharger:", allCarouselImages.length, allCarouselImages); 
@@ -431,7 +433,8 @@ export default function Home() {
                     <BentoCardSlideshow images={p.images} />
                   ) : (
                     <LazyImage 
-                      src={p.images && p.images.length > 0 ? p.images[0] : `https://picsum.photos/seed/${p.slug}/800/600`} 
+                      src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
+                      blur={p.images && p.images.length > 0 ? p.images[0].blur : undefined}
                       alt={p.title} 
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="absolute inset-0 w-full h-full"
@@ -536,7 +539,8 @@ export default function Home() {
                       />
                     ) : (
                       <LazyImage 
-                        src={p.images && p.images.length > 0 ? p.images[0] : `https://picsum.photos/seed/${p.slug}/800/600`} 
+                        src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
+                        blur={p.images && p.images.length > 0 ? p.images[0].blur : undefined}
                         alt={p.title} 
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="absolute inset-0 w-full h-full"

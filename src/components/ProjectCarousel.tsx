@@ -4,15 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Carousel } from "@/components/application/carousel/carousel-base";
-import { LazyImage } from "@/components/LazyImage";
-
-interface Project {
-  slug: string;
-  title: string;
-  category: string;
-  images?: string[];
-  video?: string;
-}
+import { Project } from "@/data/projects";
 
 interface ProjectCarouselProps {
   project: Project | null;
@@ -62,6 +54,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   const [api, setApi] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [bgColor, setBgColor] = useState<string>("#111111");
+  const [loaded, setLoaded] = useState<Record<number, boolean>>({});
   const colorCache = useRef<Record<string, string>>({});
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -87,6 +80,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   useEffect(() => {
     setActiveIndex(0);
     setBgColor("#111111");
+    setLoaded({});
     // Auto-play video when modal opens
     if (isVideo && videoRef.current) {
       videoRef.current.play().catch(() => {});
@@ -109,7 +103,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   const isOpen = !!project && (images.length > 0 || isVideo);
 
   useEffect(() => {
-    if (!isVideo && images[activeIndex]) updateColor(images[activeIndex]);
+    if (!isVideo && images[activeIndex]) updateColor(images[activeIndex].src);
   }, [activeIndex, images, updateColor, isVideo]);
 
   // Listen to carousel API for slide changes
@@ -213,18 +207,35 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                     {images.map((img, i) => (
                       <Carousel.Item
                         key={`${project!.slug}-img-${i}`}
-                        className="relative aspect-square overflow-hidden shrink-0"
+                        className={`relative w-full overflow-hidden shrink-0 ${isLandscape ? "aspect-[1251/848]" : "aspect-square"}`}
                         style={{
                           backgroundColor: bgColor,
                           transition: "background-color 0.5s ease",
                         }}
                       >
+                        {/* LQIP Blur placeholder behind the actual image */}
+                        {img.blur && !loaded[i] && (
+                          <img
+                            src={img.blur}
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute inset-0 w-full h-full object-contain scale-110"
+                            style={{ filter: "blur(20px)" }}
+                          />
+                        )}
                         <img
-                          src={img}
+                          src={img.src}
                           alt={`${project!.title} — image ${i + 1}`}
                           draggable={false}
                           onDragStart={(e) => e.preventDefault()}
-                          className="absolute inset-0 w-full h-full object-cover object-center"
+                          onLoad={() => setLoaded(prev => ({ ...prev, [i]: true }))}
+                          className="absolute inset-0 w-full h-full object-contain object-center"
+                          style={{ 
+                            filter: loaded[i] ? "blur(0px)" : "blur(15px)", 
+                            transform: loaded[i] ? "scale(1)" : "scale(1.05)", 
+                            transition: "filter 0.5s ease, transform 0.5s ease, opacity 0.5s ease",
+                            opacity: loaded[i] ? 1 : 0
+                          }}
                         />
                       </Carousel.Item>
                     ))}
