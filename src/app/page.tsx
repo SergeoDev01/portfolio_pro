@@ -27,6 +27,9 @@ function CustomEnvelope({ className }: { className?: string }) {
 
 
 
+import { LazyImage } from "@/components/LazyImage";
+import { LazyVideo } from "@/components/LazyVideo";
+
 const SPRING_CONFIG = { type: "spring", stiffness: 100, damping: 20 } as const;
 
 // Component for the bento card manual slideshow (preview using untitledui Carousel)
@@ -42,18 +45,12 @@ const BentoCardSlideshow = ({ images }: { images: string[] }) => {
         <Carousel.Content className="gap-0 h-full">
           {images.map((img, i) => (
             <Carousel.Item key={i} className="h-full w-full overflow-hidden relative">
-              <Image
+              <LazyImage
                 src={img}
                 alt=""
-                fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                quality={80}
-                loading="lazy"
-                placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNCxAQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k="
-                className="object-cover object-center"
-                draggable={false}
-                onDragStart={(e) => e.preventDefault()}
+                className="w-full h-full"
+                priority={i === 0}
               />
             </Carousel.Item>
           ))}
@@ -412,16 +409,11 @@ export default function Home() {
                   {p.images && p.images.length > 1 ? (
                     <BentoCardSlideshow images={p.images} />
                   ) : (
-                    <Image 
+                    <LazyImage 
                       src={p.images && p.images.length > 0 ? p.images[0] : `https://picsum.photos/seed/${p.slug}/800/600`} 
                       alt={p.title} 
-                      fill 
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      quality={80}
-                      loading="lazy"
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNCxAQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k="
-                      className="object-cover object-center" 
+                      className="absolute inset-0 w-full h-full"
                     />
                   )}
                   
@@ -517,33 +509,16 @@ export default function Home() {
                   >
                     {isVideoProject ? (
                       /* Video thumbnail: native video poster frame */
-                      <>
-                        <video
-                          src={(p as any).video}
-                          className="absolute inset-0 w-full h-full object-cover"
-                          muted
-                          playsInline
-                          preload="metadata"
-                          onLoadedMetadata={(e) => { (e.target as HTMLVideoElement).currentTime = 1; }}
-                        />
-                        {/* Play button overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center z-10">
-                          <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Play className="w-6 h-6 text-white fill-white ml-1" />
-                          </div>
-                        </div>
-                      </>
+                      <LazyVideo
+                        src={(p as any).video}
+                        className="absolute inset-0 w-full h-full"
+                      />
                     ) : (
-                      <Image 
+                      <LazyImage 
                         src={p.images && p.images.length > 0 ? p.images[0] : `https://picsum.photos/seed/${p.slug}/800/600`} 
                         alt={p.title} 
-                        fill 
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        quality={80}
-                        loading="lazy"
-                        placeholder="blur"
-                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNCxAQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k="
-                        className="object-cover object-center" 
+                        className="absolute inset-0 w-full h-full"
                       />
                     )}
                     

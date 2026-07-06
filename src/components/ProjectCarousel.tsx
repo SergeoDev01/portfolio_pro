@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Carousel } from "@/components/application/carousel/carousel-base";
+import { LazyImage } from "@/components/LazyImage";
 
 interface Project {
   slug: string;
@@ -227,13 +228,16 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                           transition: "background-color 0.5s ease",
                         }}
                       >
-                        <img
-                          src={img}
-                          alt={`${project!.title} — image ${i + 1}`}
-                          className="absolute inset-0 w-full h-full object-contain object-center"
-                          draggable={false}
-                          onDragStart={(e) => e.preventDefault()}
-                        />
+                        {Math.abs(i - activeIndex) <= 1 ? (
+                          <LazyImage
+                            src={img}
+                            alt={`${project!.title} — image ${i + 1}`}
+                            className="absolute inset-0 w-full h-full"
+                            priority={i === activeIndex}
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-[#1D0101]/20 animate-pulse" />
+                        )}
                       </Carousel.Item>
                     ))}
                   </Carousel.Content>
