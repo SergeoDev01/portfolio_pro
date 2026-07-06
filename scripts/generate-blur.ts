@@ -1,7 +1,7 @@
 import sharp from "sharp"; 
 import fs from "fs/promises"; 
 import path from "path"; 
-import { projects } from "../src/data/projects.ts"; 
+import { projects } from "../src/data/projects"; 
 
 async function getBlurDataURL(imagePath: string) { 
   try { 
@@ -15,8 +15,7 @@ async function getBlurDataURL(imagePath: string) {
       ? "image/jpeg" : "image/png"; 
     return `data:${mimeType};base64,${base64}`; 
   } catch (err) { 
-    console.error(`Error processing ${imagePath}:`, err);
-    // Fallback couleur palette si image introuvable 
+    // Fallback couleur palette si image introuvable, sans bloquer le build 
     return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwADhQGAWjR9awAAAABJRU5ErkJggg=="; 
   } 
 } 
