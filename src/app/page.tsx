@@ -35,6 +35,9 @@ import { ProjectImage } from "@/data/projects";
 
 const SPRING_CONFIG = { type: "spring", stiffness: 100, damping: 20 } as const;
 
+// Slugs des projets épinglés
+const PINNED_PROJECT_SLUGS = ["bingoobank", "aeron-logo", "qda"];
+
 // Component for the bento card manual slideshow (preview using untitledui Carousel)
 const BentoCardSlideshow = ({ images }: { images: ProjectImage[] }) => {
   const [api, setApi] = useState<any>(null);
@@ -212,10 +215,11 @@ const ServiceItem = ({ num, title, tags, description }: any) => {
   ); 
 };
 
-// Les 2-3 premières images du carrousel BingooBank préchargées via <link>
-const criticalCarouselImages = (projects
-  .find(p => p.slug === "bingoobank")
-  ?.images?.slice(0, 3) || []).map(img => img.src);
+// La première image de chaque projet épinglé préchargée via <link>
+const criticalCarouselImages = projects
+  .filter(p => PINNED_PROJECT_SLUGS.includes(p.slug))
+  .flatMap(p => p.images?.slice(0, 1) || [])
+  .map(img => img.src);
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Tous");
@@ -238,11 +242,9 @@ export default function Home() {
     ? projects 
     : projects.filter(p => p.category === activeCategory);
 
-  const pinnedProjects = [
-    projects.find(p => p.slug === "bingoobank"),
-    projects.find(p => p.slug === "aeron-logo"),
-    projects.find(p => p.slug === "qda"),
-  ].filter(Boolean) as typeof projects;
+  const pinnedProjects = PINNED_PROJECT_SLUGS
+    .map(slug => projects.find(p => p.slug === slug))
+    .filter(Boolean) as typeof projects;
 
   // Scroll to section and close mobile menu
   const handleNavClick = (href: string) => {

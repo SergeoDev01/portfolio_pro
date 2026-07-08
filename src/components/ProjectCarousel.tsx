@@ -182,6 +182,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
               ) : (
                 /* IMAGE CAROUSEL MODE */
                 <Carousel.Root
+                  key={project!.slug}
                   opts={{ loop: true }}
                   setApi={setApi}
                   className={`relative w-full ${isLandscape ? "aspect-[1251/848]" : "aspect-square"}`}
