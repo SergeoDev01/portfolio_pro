@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
-import { Carousel } from "@/components/application/carousel/carousel-base";
+import { X } from "lucide-react";
+import { SimpleCarousel } from "@/components/SimpleCarousel";
 import { Project } from "@/data/projects";
 
 interface ProjectCarouselProps {
@@ -51,12 +51,9 @@ async function getDominantColor(src: string): Promise<string> {
 }
 
 export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
-  const [api, setApi] = useState<any>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [bgColor, setBgColor] = useState<string>("#111111");
   const colorCache = useRef<Record<string, string>>({});
   const videoRef = useRef<HTMLVideoElement>(null);
-  const mountId = useRef(Date.now()).current;
 
   const isVideo = !!project?.video;
   const isLandscape = project?.slug === "parle-g-shooting" || isVideo;
@@ -78,7 +75,6 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
 
   // Reset state when project changes
   useEffect(() => {
-    setActiveIndex(0);
     setBgColor("#111111");
     // Auto-play video when modal opens
     if (isVideo && videoRef.current) {
@@ -101,10 +97,14 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   const images = project?.images || [];
   const isOpen = !!project && (images.length > 0 || isVideo);
 
-  useEffect(() => {
-    if (!isVideo && images[activeIndex]) updateColor(images[activeIndex].src);
-  }, [activeIndex, images, updateColor, isVideo]);
+  // Handle carousel index change
+  const handleIndexChange = useCallback((index: number) => {
+    if (!isVideo && images[index]) {
+      updateColor(images[index].src);
+    }
+  }, [images, updateColor, isVideo]);
 
+  // Preload images
   useEffect(() => {
     if (isVideo || images.length === 0) return;
 
@@ -113,17 +113,6 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
       preloadImage.src = src;
     });
   }, [images, isVideo]);
-
-  // Listen to carousel API for slide changes
-  useEffect(() => {
-    if (!api) return;
-    const onSelect = () => {
-      const idx = api.selectedScrollSnap?.() ?? 0;
-      setActiveIndex(idx);
-    };
-    api.on?.("select", onSelect);
-    return () => { api.off?.("select", onSelect); };
-  }, [api]);
 
   return (
     <AnimatePresence>
@@ -182,59 +171,12 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                 </div>
               ) : (
                 /* IMAGE CAROUSEL MODE */
-                <Carousel.Root
-                  key={`${project!.slug}-${mountId}`}
-                  opts={{ loop: true }}
-                  setApi={setApi}
-                  className={`relative w-full ${isLandscape ? "aspect-[1251/848]" : "aspect-square"}`}
-                >
-                  <Carousel.PrevTrigger className="absolute top-1/2 left-4 z-10 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white disabled:opacity-30 disabled:cursor-not-allowed">
-                    <ChevronLeft className="h-5 w-5" />
-                  </Carousel.PrevTrigger>
-
-                  <Carousel.NextTrigger className="absolute top-1/2 right-4 z-10 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white disabled:opacity-30 disabled:cursor-not-allowed">
-                    <ChevronRight className="h-5 w-5" />
-                  </Carousel.NextTrigger>
-
-                  <div className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2">
-                    <Carousel.IndicatorGroup className="flex gap-2">
-                      {({ index }) => (
-                        <Carousel.Indicator
-                          key={index}
-                          index={index}
-                          className={({ isSelected }) =>
-                            `w-2 h-2 rounded-full transition-colors ${
-                              isSelected ? "bg-[var(--color-accent)]" : "bg-white/40"
-                            }`
-                          }
-                        />
-                      )}
-                    </Carousel.IndicatorGroup>
-                  </div>
-
-                  <Carousel.Content className="gap-0">
-                    {images.map((img, i) => (
-                      <Carousel.Item
-                        key={`${project!.slug}-img-${i}`}
-                        className={`relative w-full overflow-hidden shrink-0 ${isLandscape ? "aspect-[1251/848]" : "aspect-square"}`}
-                        style={{
-                          backgroundColor: bgColor,
-                          transition: "background-color 0.5s ease",
-                        }}
-                      >
-                        <img
-                          src={img.src}
-                          alt={`${project!.title} — image ${i + 1}`}
-                          draggable={false}
-                          onDragStart={(e) => e.preventDefault()}
-                          className="absolute inset-0 w-full h-full object-contain object-center"
-                          loading="eager"
-                          decoding="async"
-                        />
-                      </Carousel.Item>
-                    ))}
-                  </Carousel.Content>
-                </Carousel.Root>
+                <SimpleCarousel
+                  images={images}
+                  isLandscape={isLandscape}
+                  bgColor={bgColor}
+                  onIndexChange={handleIndexChange}
+                />
               )}
             </motion.div>
           </motion.div>
