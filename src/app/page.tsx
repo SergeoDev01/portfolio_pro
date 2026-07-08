@@ -6,7 +6,7 @@ import { projects } from "@/data/projects";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
-import { ProjectCarousel } from "@/components/ProjectCarousel";
+import { MinimalCarousel } from "@/components/MinimalCarousel";
 import { Carousel } from "@/components/application/carousel/carousel-base";
 import { CheckCircle2, Menu, X, PaintBucket, Pin, Play } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
@@ -571,10 +571,9 @@ export default function Home() {
         <Footer />
       </main>
 
-      <ProjectCarousel
-        key={modalKey}
+      <MinimalCarousel
         project={selectedProject}
-        onClose={() => setSelectedProject(null)} 
+        onClose={() => setSelectedProject(null)}
       />
     </div>
     </>
