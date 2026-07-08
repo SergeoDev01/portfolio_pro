@@ -12,7 +12,7 @@ export function useInView(options?: IntersectionObserverInit) {
         setInView(true);
         observer.disconnect(); // une fois visible, ne plus observer
       }
-    }, { rootMargin: "600px 0px", ...options }); // 600px avant d'entrer dans l'écran
+    }, { rootMargin: "1500px 0px", ...options }); // 1500px avant d'entrer dans l'écran
     observer.observe(el);
     return () => observer.disconnect();
   }, [options]);

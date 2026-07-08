@@ -130,7 +130,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
         <>
           {/* Backdrop */}
           <motion.div
-            key="carousel-backdrop"
+            key={`carousel-backdrop-${project!.slug}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -140,14 +140,14 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
 
           {/* Wrapper */}
           <motion.div
-            key="carousel-modal-wrapper"
+            key={`carousel-modal-wrapper-${project!.slug}`}
             className="fixed top-0 bottom-0 right-0 left-0 lg:left-[280px] z-50 flex items-center justify-center p-0 lg:p-8 pointer-events-none"
             role="dialog"
             aria-modal="true"
           >
             {/* Modal Container */}
             <motion.div
-              key="carousel-modal"
+              key={`carousel-modal-${project!.slug}`}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -227,7 +227,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                           draggable={false}
                           onDragStart={(e) => e.preventDefault()}
                           className="absolute inset-0 w-full h-full object-contain object-center"
-                          loading={i === 0 ? "eager" : "lazy"}
+                          loading="eager"
                           decoding="async"
                         />
                       </Carousel.Item>
