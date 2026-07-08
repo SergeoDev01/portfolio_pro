@@ -215,9 +215,8 @@ const ServiceItem = ({ num, title, tags, description }: any) => {
   ); 
 };
 
-// La première image de chaque projet épinglé préchargée via <link>
+// Toutes les premières images de tous les projets préchargées via <link>
 const criticalCarouselImages = projects
-  .filter(p => PINNED_PROJECT_SLUGS.includes(p.slug))
   .flatMap(p => p.images?.slice(0, 1) || [])
   .map(img => img.src);
 
