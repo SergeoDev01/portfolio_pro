@@ -27,9 +27,9 @@ export function LazyVideo({
       {inView && (
         <>
           <video
-            src={playing ? src : undefined}
+            src={playing ? src : (poster ? undefined : `${src}#t=0.1`)}
             poster={poster}
-            preload="none" // ← ne télécharge RIEN tant que l'user n'a pas cliqué
+            preload={poster ? "none" : "metadata"}
             autoPlay={playing}
             controls={playing}
             playsInline
