@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { X } from "lucide-react";
+import { SimpleCarousel } from "@/components/SimpleCarousel";
 import type { Project } from "@/data/projects";
 
 interface MinimalCarouselProps {
@@ -28,7 +29,7 @@ export function MinimalCarousel({ project, onClose }: MinimalCarouselProps) {
 
   if (!project || !project.images || project.images.length === 0) return null;
 
-  const firstImage = project.images[0];
+  const isLandscape = project.slug === "parle-g-shooting";
 
   return (
     <>
@@ -38,9 +39,13 @@ export function MinimalCarousel({ project, onClose }: MinimalCarouselProps) {
         className="fixed inset-0 lg:left-[280px] bg-black/60 backdrop-blur-sm z-40"
       />
 
-      {/* Modal */}
-      <div className="fixed inset-0 lg:left-[280px] z-50 flex items-center justify-center p-8">
-        <div className="relative bg-gray-900 rounded-lg overflow-hidden shadow-2xl w-full max-w-[600px] aspect-square">
+      {/* Modal - NO AnimatePresence, just simple render */}
+      <div className="fixed inset-0 lg:left-[280px] z-50 flex items-center justify-center p-0 lg:p-8 pointer-events-none">
+        <div className={`relative bg-gray-900 lg:rounded-lg overflow-hidden shadow-2xl pointer-events-auto ${
+          isLandscape
+            ? "h-[100dvh] lg:h-auto lg:aspect-video lg:max-w-[900px] w-full"
+            : "h-[100dvh] lg:h-auto lg:aspect-square lg:max-w-[600px] w-full"
+        }`}>
           {/* Close button */}
           <button
             onClick={onClose}
@@ -49,12 +54,11 @@ export function MinimalCarousel({ project, onClose }: MinimalCarouselProps) {
             <X className="w-6 h-6" />
           </button>
 
-          {/* Single image - NO carousel, NO animations */}
-          <img
-            src={firstImage.src}
-            alt={project.title}
-            className="w-full h-full object-contain"
-            loading="eager"
+          {/* SimpleCarousel with navigation */}
+          <SimpleCarousel
+            images={project.images}
+            isLandscape={isLandscape}
+            bgColor="#111111"
           />
         </div>
       </div>
