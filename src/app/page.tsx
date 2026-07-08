@@ -225,6 +225,7 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [modalKey, setModalKey] = useState(0);
 
   // Collecter toutes les images de carrousel de tous les projets sans doublons
   const allCarouselImages = useMemo(() => 
@@ -423,6 +424,7 @@ export default function Home() {
                   onClick={() => {
                     if (p.images && p.images.length > 0) {
                       setSelectedProject(p);
+                      setModalKey(k => k + 1);
                     }
                   }}
                   className={cn(
@@ -528,7 +530,10 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={SPRING_CONFIG}
-                    onClick={() => setSelectedProject(p)}
+                    onClick={() => {
+                      setSelectedProject(p);
+                      setModalKey(k => k + 1);
+                    }}
                     className="relative overflow-hidden rounded-[var(--radius-card)] group cursor-pointer shadow-sm hover:shadow-xl transition-shadow bg-black col-span-1 aspect-square"
                   >
                     {isVideoProject ? (
@@ -566,8 +571,9 @@ export default function Home() {
         <Footer />
       </main>
 
-      <ProjectCarousel 
-        project={selectedProject} 
+      <ProjectCarousel
+        key={modalKey}
+        project={selectedProject}
         onClose={() => setSelectedProject(null)} 
       />
     </div>
