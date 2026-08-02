@@ -25,7 +25,7 @@ export const projects: Project[] = [
     tags: ["Projet web"],
     featured: true,
     url: "https://bingoobank.vercel.app/",
-    images: [{ src: "/projet_web/bingoobank_landing_page.png", blur: "" }],
+    images: [{ src: "/projet_web/bingoobank_landing_page.webp", blur: "" }],
   },
   {
     slug: "fontdrop",
@@ -34,7 +34,7 @@ export const projects: Project[] = [
     tags: ["Projet web", "Application web"],
     featured: true,
     url: "https://fontdrop.vercel.app/",
-    images: [{ src: "/projet_web/fontdrop_saas_landing_page.png", blur: "" }],
+    images: [{ src: "/projet_web/fontdrop_saas_landing_page.webp", blur: "" }],
   },
   {
     slug: "startuperio",
@@ -43,7 +43,7 @@ export const projects: Project[] = [
     tags: ["Projet web"],
     featured: true,
     url: "https://startuper-io.vercel.app/",
-    images: [{ src: "/projet_web/startuperio_landing_page.png", blur: "" }],
+    images: [{ src: "/projet_web/startuperio_landing_page.webp", blur: "" }],
   },
   {
     slug: "formation-trading",
@@ -52,7 +52,7 @@ export const projects: Project[] = [
     tags: ["Projet web"],
     featured: true,
     url: "https://sergeo02.github.io/formation_trading/",
-    images: [{ src: "/projet_web/page_de_vente_trading.png", blur: "" }],
+    images: [{ src: "/projet_web/page_de_vente_trading.webp", blur: "" }],
   },
   { 
     slug: "bingoobank", 
