@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --webpack",
     "generate-blur": "tsx scripts/generate-blur.ts",
+    "generate-favicon": "tsx scripts/generate-favicon.ts",
     "prebuild": "npm run generate-blur",
     "build": "next build --webpack",
     "start": "next start",

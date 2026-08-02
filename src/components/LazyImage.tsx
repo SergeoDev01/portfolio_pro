@@ -8,12 +8,14 @@ export function LazyImage({
   className = "",
   priority = false,
   sizes = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
+  objectPosition = "center",
 }: {
   src: string;
   alt: string;
   className?: string;
   priority?: boolean;
   sizes?: string;
+  objectPosition?: string;
 }) {
   const { ref, inView } = useInView();
 
@@ -28,7 +30,8 @@ export function LazyImage({
           quality={80}
           priority={priority}
           loading={priority ? "eager" : "lazy"}
-          className="object-cover object-center"
+          className="object-cover"
+          style={{ objectPosition }}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
         />

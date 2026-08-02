@@ -1,17 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Sidebar, navItems, getNavIcon } from "@/components/Sidebar";
 import { projects } from "@/data/projects";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMemo } from "react";
-import { MinimalCarousel } from "@/components/MinimalCarousel";
-import { Carousel } from "@/components/application/carousel/carousel-base";
-import { CheckCircle2, Menu, X, PaintBucket, Pin, Play } from "lucide-react";
+import { CheckCircle2, Menu, X, PaintBucket, Pin } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { usePreloadImages } from "@/hooks/usePreloadImages";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -30,41 +27,10 @@ function CustomEnvelope({ className }: { className?: string }) {
 
 
 import { LazyImage } from "@/components/LazyImage";
-import { LazyVideo } from "@/components/LazyVideo";
-import { ProjectImage } from "@/data/projects";
+import { LandingPreview } from "@/components/LandingPreview";
+import { featuredLandingProjects } from "@/data/landing-projects";
 
 const SPRING_CONFIG = { type: "spring", stiffness: 100, damping: 20 } as const;
-
-// Slugs des projets épinglés
-const PINNED_PROJECT_SLUGS = ["bingoobank", "aeron-logo", "qda"];
-
-// Component for the bento card manual slideshow (preview using untitledui Carousel)
-const BentoCardSlideshow = ({ images }: { images: ProjectImage[] }) => {
-  const [api, setApi] = useState<any>(null);
-
-  return (
-    <div 
-      className="absolute inset-0 w-full h-full overflow-hidden" 
-      style={{ borderRadius: "var(--radius-card)" }}
-    >
-      <Carousel.Root opts={{ loop: true }} setApi={setApi} className="w-full h-full">
-        <Carousel.Content className="gap-0 h-full">
-          {images.map((img, i) => (
-            <Carousel.Item key={i} className="h-full w-full overflow-hidden relative">
-              <LazyImage
-                src={img.src}
-                alt=""
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="w-full h-full"
-                priority={i === 0}
-              />
-            </Carousel.Item>
-          ))}
-        </Carousel.Content>
-      </Carousel.Root>
-    </div>
-  );
-};
 
 import { AProposSection } from "@/components/AProposSection";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -215,36 +181,21 @@ const ServiceItem = ({ num, title, tags, description }: any) => {
   ); 
 };
 
-// Toutes les premières images de tous les projets préchargées via <link>
-const criticalCarouselImages = projects
-  .flatMap(p => p.images?.slice(0, 1) || [])
-  .map(img => img.src);
-
 export default function Home() {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<any>(null);
-  const [modalKey, setModalKey] = useState(0);
 
-  // Collecter toutes les images de carrousel de tous les projets sans doublons
-  const allCarouselImages = useMemo(() => 
-    [...new Set(projects.flatMap((p) => p.images?.map(img => img.src) || []))], 
-  []);
-
-  console.log("Images à précharger:", allCarouselImages.length, allCarouselImages); 
-  
-  // Précharger 1.5s après le mount
-  usePreloadImages(allCarouselImages, 1500);
-
-  const categories = ["Tous", ...Array.from(new Set(projects.map(p => p.category)))];
+  const categories = ["Tous", ...Array.from(new Set([
+    ...projects.map(p => p.category),
+    ...projects.flatMap(p => p.tags ?? []),
+  ]))];
   
   const filteredProjects = activeCategory === "Tous" 
     ? projects 
-    : projects.filter(p => p.category === activeCategory);
+    : projects.filter(p => p.category === activeCategory || (p.tags ?? []).includes(activeCategory));
 
-  const pinnedProjects = PINNED_PROJECT_SLUGS
-    .map(slug => projects.find(p => p.slug === slug))
-    .filter(Boolean) as typeof projects;
+  const pinnedProjects = featuredLandingProjects;
 
   // Scroll to section and close mobile menu
   const handleNavClick = (href: string) => {
@@ -266,11 +217,7 @@ export default function Home() {
   }, [isMobileMenuOpen]);
 
   return (
-    <>
-      {criticalCarouselImages.map((src) => (
-        <link key={src} rel="preload" as="image" href={src} />
-      ))}
-      <div className="min-h-[100dvh] bg-[var(--color-bg-tint)] font-sans">
+    <div className="min-h-[100dvh] bg-[var(--color-bg-tint)] font-sans">
         
         {/* Floating Hamburger Button for Mobile */}
       <button 
@@ -375,7 +322,7 @@ export default function Home() {
           </div>
         </section>
          {/* HERO SECTION */}
-        <section id="accueil" className="relative flex flex-col pt-4 lg:pt-16 pb-16 lg:pb-24 px-6 lg:px-12">
+        <section id="accueil" className="relative flex flex-col pt-4 lg:pt-16 pb-4 lg:pb-8 px-6 lg:px-12">
           <div className="max-w-4xl mx-auto w-full">
             <h1 className="font-company text-4xl lg:text-6xl font-bold text-[#1D0101] tracking-tight text-center leading-tight max-w-3xl mx-auto mb-2 lg:mb-4"> 
               Je transforme{" "} 
@@ -399,12 +346,12 @@ export default function Home() {
           </div>
 
           {/* Subtitle "Projets épinglés" */}
-          <div className="flex items-center gap-2 mb-6 mt-12 text-[var(--color-dark)]/70 uppercase tracking-widest text-xs lg:text-sm font-bold">
+          <div className="flex items-center gap-2 mb-6 mt-8 lg:mt-10 text-[var(--color-dark)]/70 uppercase tracking-widest text-xs lg:text-sm font-bold">
             <Pin className="w-4 h-4 transform rotate-45" />
             <span>Projets épinglés</span>
           </div>
 
-          {/* Pinned Bento Grid (3 projects: BingooBank, Projet 2, Projet 3) */}
+          {/* Pinned Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
             {pinnedProjects.map((p, index) => {
               const isVedette = index === 0;
@@ -420,54 +367,19 @@ export default function Home() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={SPRING_CONFIG}
-                  onClick={() => {
-                    if (p.images && p.images.length > 0) {
-                      setSelectedProject(p);
-                      setModalKey(k => k + 1);
-                    }
-                  }}
-                  className={cn(
-                    "relative overflow-hidden rounded-[var(--radius-card)] group cursor-pointer shadow-sm hover:shadow-xl transition-shadow bg-white",
-                    bentoClass
-                  )}
+                  className={bentoClass}
                 >
-                  {p.images && p.images.length > 1 ? (
-                    <BentoCardSlideshow images={p.images} />
-                  ) : (
-                    <LazyImage 
-                      src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
-                      alt={p.title} 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="absolute inset-0 w-full h-full"
-                    />
-                  )}
-                  
-                  {/* Pin Icon */}
-                  <div className={cn(
-                    "absolute top-3 right-3 bg-[var(--color-dark)]/60 text-[var(--color-accent)] p-2 rounded-lg flex items-center justify-center z-20 backdrop-blur-sm",
-                    isVedette && "p-3 bg-[var(--color-dark)]/80"
-                  )}>
-                    <Pin className={cn("transform rotate-45 text-[var(--color-accent)]", isVedette ? "w-5 h-5" : "w-3.5 h-3.5")} />
-                  </div>
-
-                  {/* Bottom Gradient Overlay */}
-                  <div className={cn(
-                    "absolute inset-0 bg-gradient-to-t from-[var(--color-dark)]/90 via-[var(--color-dark)]/30 to-transparent flex flex-col justify-end p-4 lg:p-6 z-10",
-                    isVedette && "lg:p-8"
-                  )}>
-                    <span className={cn(
-                      "text-[var(--color-accent)] font-bold text-xs mb-1",
-                      isVedette && "lg:text-sm lg:mb-2"
-                    )}>
-                      {p.category}
-                    </span>
-                    <h3 className={cn(
-                      "text-white text-base lg:text-lg font-bold leading-tight",
-                      isVedette && "text-lg lg:text-2xl"
-                    )}>
-                      {p.title}
-                    </h3>
-                  </div>
+                  <LandingPreview
+                    src={p.image}
+                    alt={`Aperçu du site ${p.title}`}
+                    href={p.url}
+                    category={p.category}
+                    title={p.title}
+                    ratio={p.ratio}
+                    priority={isVedette}
+                    isVedette={isVedette}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
                 </motion.div>
               );
             })}
@@ -520,7 +432,6 @@ export default function Home() {
           <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <AnimatePresence>
               {filteredProjects.map((p) => {
-                const isVideoProject = !!(p as any).video;
                 return (
                   <motion.div
                     key={p.slug}
@@ -529,26 +440,16 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={SPRING_CONFIG}
-                    onClick={() => {
-                      setSelectedProject(p);
-                      setModalKey(k => k + 1);
-                    }}
+                    onClick={() => router.push(`/projets/${p.slug}`)}
                     className="relative overflow-hidden rounded-[var(--radius-card)] group cursor-pointer shadow-sm hover:shadow-xl transition-shadow bg-black col-span-1 aspect-square"
                   >
-                    {isVideoProject ? (
-                      /* Video thumbnail: native video poster frame */
-                      <LazyVideo
-                        src={(p as any).video}
-                        className="absolute inset-0 w-full h-full"
-                      />
-                    ) : (
-                      <LazyImage 
-                        src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
-                        alt={p.title} 
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="absolute inset-0 w-full h-full"
-                      />
-                    )}
+                    <LazyImage 
+                      src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
+                      alt={p.title} 
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="absolute inset-0 w-full h-full"
+                      objectPosition={p.category === "Projet web" || p.category === "Application web" ? "top" : "center"}
+                    />
                     
                     {/* Bottom Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-dark)]/90 via-[var(--color-dark)]/30 to-transparent flex flex-col justify-end p-4 lg:p-6 z-10">
@@ -569,12 +470,6 @@ export default function Home() {
         {/* FOOTER */}
         <Footer />
       </main>
-
-      <MinimalCarousel
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
     </div>
-    </>
   );
 }

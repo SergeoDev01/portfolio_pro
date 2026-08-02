@@ -11,6 +11,8 @@ export function AProposSection() {
   const [basePos, setBasePos] = useState({ top: 0, width: 220, height: 180 });
   const [offset, setOffset] = useState({ x: 0, y: 200 }); // offset manuel DEV
   const [cardPaddingTop, setCardPaddingTop] = useState("2rem");
+  const [padTop, setPadTop] = useState(440 * APROPOS_PNG_RATIO * HAND_LINE_PERCENT);
+  const [isMobile, setIsMobile] = useState(false);
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef({ mx: 0, my: 0, ox: 0, oy: 0 });
 
@@ -24,6 +26,8 @@ export function AProposSection() {
     const overlapBelow = imgHeight * (1 - HAND_LINE_PERCENT);
     setBasePos({ top: -overlapAbove, width: imgWidth, height: imgHeight });
     setCardPaddingTop(`${overlapBelow + 24}px`);
+    setPadTop(Math.max(overlapAbove + 8, 8));
+    setIsMobile(window.innerWidth < 1024);
   }, []);
 
   useEffect(() => {
@@ -63,9 +67,9 @@ export function AProposSection() {
   }, [dragging]);
 
   return (
-    <section id="a-propos" className="px-6 lg:px-12 py-16">
+    <section id="a-propos" className="px-6 lg:px-12 pt-2 pb-4 lg:pt-4 lg:pb-6">
       <div ref={wrapperRef} className="relative max-w-4xl mx-auto"
-           style={{ paddingTop: `${440 * APROPOS_PNG_RATIO * HAND_LINE_PERCENT}px` }}>
+           style={{ paddingTop: isMobile ? `${padTop}px` : `${440 * APROPOS_PNG_RATIO * HAND_LINE_PERCENT}px` }}>
 
         {/* PNG draggable en DEV */}
         <Image
@@ -79,7 +83,7 @@ export function AProposSection() {
           onMouseDown={handleMouseDown}
           style={{
             position: "absolute",
-            top: basePos.top + offset.y,
+            top: isMobile ? (DEV_POSITION ? basePos.top + offset.y : 8) : basePos.top + offset.y,
             left: "50%",
             transform: "translateX(-50%)",
             width: basePos.width,
@@ -103,12 +107,12 @@ export function AProposSection() {
                paddingTop: cardPaddingTop,
              }}>
           <div className="text-center mb-6"> 
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1D0101]/40 mb-1"> 
-              De moi 
-            </p> 
             <h2 className="font-company text-3xl lg:text-4xl font-bold text-[#1D0101]"> 
               À propos 
             </h2> 
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#1D0101]/40 mt-1"> 
+              De moi 
+            </p> 
           </div> 
           <div className="prose prose-base lg:prose-lg text-[var(--color-dark)]/85 mb-8">
             <p className="mb-4">

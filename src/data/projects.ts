@@ -12,10 +12,43 @@ export type Project = {
   featured: boolean;
   images: ProjectImage[];
   video?: string;
+  tags?: string[];
 };
 
 // Fusionner les blurDataURL dans les projets
 export const projects: Project[] = [
+  {
+    slug: "bingoobank-web",
+    title: "BingooBank Web",
+    category: "Projet web",
+    tags: ["Projet web"],
+    featured: true,
+    images: [{ src: "/projet_web/bingoobank_landing_page.png", blur: "" }],
+  },
+  {
+    slug: "fontdrop",
+    title: "Fontdrop",
+    category: "Application web",
+    tags: ["Projet web", "Application web"],
+    featured: true,
+    images: [{ src: "/projet_web/fontdrop_saas_landing_page.png", blur: "" }],
+  },
+  {
+    slug: "startuperio",
+    title: "Startuperio",
+    category: "Projet web",
+    tags: ["Projet web"],
+    featured: true,
+    images: [{ src: "/projet_web/startuperio_landing_page.png", blur: "" }],
+  },
+  {
+    slug: "formation-trading",
+    title: "Page de vente Trading",
+    category: "Projet web",
+    tags: ["Projet web"],
+    featured: true,
+    images: [{ src: "/projet_web/page_de_vente_trading.png", blur: "" }],
+  },
   { 
     slug: "bingoobank", 
     title: "BingooBank", 

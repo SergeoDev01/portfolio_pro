@@ -223,5 +223,29 @@
   ],
   "pub-for-sure": [],
   "pub-mango-juice": [],
-  "pub-ugc": []
+  "pub-ugc": [],
+  "bingoobank-web": [
+    {
+      "src": "/projet_web/bingoobank_landing_page.png",
+      "blur": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKCAYAAACe5Y9JAAAACXBIWXMAAAsSAAALEgHS3X78AAAAUklEQVQImRXLSwqAMAwA0UCNjWlLEUQQP9iVuPD+xxvpYjYPRq7kNHdEVRlUkZwSucsyz9zHjozThJkhrzutVmQrhXNdkRCN0K8WIz35zHhU+QH4PBdUJAZLMgAAAABJRU5ErkJggg=="
+    }
+  ],
+  "fontdrop": [
+    {
+      "src": "/projet_web/fontdrop_saas_landing_page.png",
+      "blur": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAKCAYAAACe5Y9JAAAACXBIWXMAAAsSAAALEgHS3X78AAAASklEQVQImQXBCQ6AIAxFwZ+AobUFxMQl8f7nfM7I48P2B/U8MZsoM3A3ZOa05ijHTc4XresjoqM4HratociBx0S+L5oNVEqh1soP6KgWpPsjo0IAAAAASUVORK5CYII="
+    }
+  ],
+  "startuperio": [
+    {
+      "src": "/projet_web/startuperio_landing_page.png",
+      "blur": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAKCAYAAAB10jRKAAAACXBIWXMAAAsSAAALEgHS3X78AAAAOUlEQVQImWNwEOf+z8DLxfGfgZeP7z+DCA/XfwZuDvb/DEIC/P8ZBEFivJwc/xmYWFj/M4TJcv0HABvEC+kE8tQZAAAAAElFTkSuQmCC"
+    }
+  ],
+  "formation-trading": [
+    {
+      "src": "/projet_web/page_de_vente_trading.png",
+      "blur": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAKCAYAAABxJ+R3AAAACXBIWXMAAAsSAAALEgHS3X78AAAAcklEQVQImRXKsQrCMBCA4dua3iWXBiW1gVIKKooOijg6u7n4/s/yi9/8SblG5vuEn3okjT3bZyS1gKQaWS8zw+iIZmW5NbwkpLdAyB1BOySaUQbHkiL1kFkfE14NaR9n+W6ob0UsK22/Qz0g/3t+HTFXflJTJYGGP86gAAAAAElFTkSuQmCC"
+    }
+  ]
 }
