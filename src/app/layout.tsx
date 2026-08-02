@@ -15,8 +15,8 @@ const company = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Sergeo Limta — Graphiste & Brand Designer",
-  description: "Portfolio de Sergeo Limta, Designer graphique et développeur créatif basé à Lomé, spécialisé en branding, UI/UX et production assistée par IA.",
+  title: "Sergeo Limta — Web Engineer & Prompt Engineer",
+  description: "Portfolio de Sergeo Limta, Web engineer et prompt engineer basé à Lomé, spécialisé dans la création de sites web, portfolios, applications web & desktop, et production de contenu assistée par IA.",
 };
 
 export default function RootLayout({

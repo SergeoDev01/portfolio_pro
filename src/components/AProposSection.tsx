@@ -116,10 +116,10 @@ export function AProposSection() {
           </div> 
           <div className="prose prose-base lg:prose-lg text-[var(--color-dark)]/85 mb-8">
             <p className="mb-4">
-              Passionné par la convergence entre le design et la technologie, j'évolue avec une double casquette de créatif et de développeur.
+              Passionné par la convergence entre l'ingénierie web et l'intelligence artificielle, j'évolue avec une double casquette de web engineer et de prompt engineer.
             </p>
             <p>
-              Mon approche consiste à ne pas seulement créer de belles interfaces, mais à concevoir des expériences utilisateur robustes, accessibles et mémorables. L'intégration des outils de pointe, comme l'IA générative, me permet d'explorer des territoires créatifs inédits.
+              Mon approche consiste à concevoir des sites web, portfolios et applications (web et desktop) robustes, rapides et bien pensés, en m'appuyant sur les outils IA les plus avancés pour accélérer le développement et produire du contenu de qualité — visuel, texte, vidéo.
             </p>
           </div>
 
@@ -137,7 +137,7 @@ export function AProposSection() {
           <div>
             <h3 className="font-bold text-sm text-[var(--color-dark)]/60 uppercase tracking-wider mb-3">Stack & Outils</h3>
             <div className="flex flex-wrap gap-2">
-              {["Figma", "Tauri", "Next.js", "React", "IA Générative", "Tailwind CSS", "TypeScript"].map(tool => (
+              {["Tauri", "Next.js", "React", "IA Générative", "Tailwind CSS", "TypeScript"].map(tool => (
                 <span key={tool} className="px-3 py-1.5 bg-white text-[var(--color-dark)] text-xs font-semibold rounded-lg shadow-sm border border-[var(--color-dark)]/5">
                   {tool}
                 </span>

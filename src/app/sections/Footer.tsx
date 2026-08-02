@@ -44,8 +44,8 @@ export default function Footer() {
 
         {/* Description — pleine largeur, sous le bloc titre/CTA */}
         <p className="text-white/35 text-sm leading-relaxed max-w-md mb-10">
-          Designer graphique & développeur créatif basé à Lomé, Togo.
-          Spécialisé en branding, UI/UX et production assistée par IA.
+          Web engineer & prompt engineer basé à Lomé, Togo.
+          Spécialisé dans la création de sites web, portfolios, applications web & desktop, et production de contenu assistée par IA.
         </p>
 
         {/* Séparateur */}

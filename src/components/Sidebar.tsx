@@ -127,7 +127,7 @@ export function Sidebar() {
           Sergeo Limta
           <CheckCircle2 className="w-5 h-5 text-[var(--color-verified)]" />
         </h1>
-        <p className="text-sm text-gray-400 mt-1 text-center">Graphiste & Brand Designer</p>
+        <p className="text-sm text-gray-400 mt-1 text-center">Web Engineer & Prompt Engineer</p>
       </div>
 
       <nav className="flex-1 flex flex-col gap-1 px-6 overflow-y-auto">

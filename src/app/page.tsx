@@ -41,9 +41,9 @@ import Footer from "./sections/Footer";
 const services = [ 
   { 
     num: "01", 
-    title: "Identité de marque", 
-    tags: "Branding · Logo · Charte", 
-    description: "Création de logos, chartes graphiques et univers visuels cohérents qui donnent une personnalité forte et mémorable à votre marque.", 
+    title: "Sites web sur-mesure", 
+    tags: "Vitrine · Portfolio · Landing page", 
+    description: "Création de sites web vitrine, portfolios et landing pages performants, conçus pour présenter votre activité et convertir vos visiteurs.", 
     href: "#contact", 
   }, 
   { 
@@ -55,7 +55,7 @@ const services = [
   }, 
   { 
     num: "03", 
-    title: "Applications sur-mesure", 
+    title: "Applications web & desktop", 
     tags: "React · Next.js · Tauri", 
     description: "Développement d'applications web et desktop performantes, pensées pour durer et s'adapter à vos besoins spécifiques.", 
     href: "#contact", 
@@ -318,7 +318,7 @@ export default function Home() {
               Sergeo Limta
               <CheckCircle2 className="w-4 h-4 text-[var(--color-verified)]" />
             </h1>
-            <p className="text-xs text-[var(--color-dark)]/70 font-medium">Graphiste & Brand Designer</p>
+            <p className="text-xs text-[var(--color-dark)]/70 font-medium">Web Engineer & Prompt Engineer</p>
           </div>
         </section>
          {/* HERO SECTION */}
@@ -328,16 +328,16 @@ export default function Home() {
               Je transforme{" "} 
               <MarkerHighlight color="#FFD700">vos idées</MarkerHighlight> 
               {" "}en{" "} 
-              <MarkerHighlight color="#E6C200">identités visuelles</MarkerHighlight> 
+              <MarkerHighlight color="#E6C200">produits digitaux</MarkerHighlight> 
               {" "} 
-              <MarkerHighlight color="#FFD700">fortes.</MarkerHighlight> 
+              <MarkerHighlight color="#FFD700">performants.</MarkerHighlight> 
             </h1> 
             <p className="text-center text-[#1D0101]/60 max-w-xl mx-auto mt-4 mb-3 lg:mb-6 leading-relaxed"> 
-              Designer graphique et développeur créatif basé à Lomé, spécialisé en branding, UI/UX et production assistée par IA.
+              Web engineer et prompt engineer basé à Lomé, spécialisé dans la création de sites web, portfolios, applications web & desktop, et la production de contenu assistée par IA.
             </p>
             
             <div className="flex flex-wrap gap-2 justify-center mt-6 mb-6">
-              {["Branding", "UI/UX Design", "Direction Artistique", "Développement Web", "Production IA"].map(badge => (
+              {["Développement Web", "Applications Desktop", "UI/UX Design", "Prompt Engineering", "Production IA"].map(badge => (
                 <span key={badge} className="px-3.5 py-1.5 bg-[var(--color-accent)] text-[var(--color-dark)] text-xs lg:text-sm font-semibold rounded-full shadow-sm whitespace-nowrap">
                   {badge}
                 </span>
@@ -440,9 +440,20 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={SPRING_CONFIG}
-                    onClick={() => router.push(`/projets/${p.slug}`)}
+                    onClick={() => {
+                      if (!p.url) router.push(`/projets/${p.slug}`);
+                    }}
                     className="relative overflow-hidden rounded-[var(--radius-card)] group cursor-pointer shadow-sm hover:shadow-xl transition-shadow bg-black col-span-1 aspect-square"
                   >
+                    {p.url && (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Ouvrir ${p.title}`}
+                        className="absolute inset-0 z-20"
+                      />
+                    )}
                     <LazyImage 
                       src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
                       alt={p.title} 

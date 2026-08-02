@@ -13,16 +13,18 @@ export type Project = {
   images: ProjectImage[];
   video?: string;
   tags?: string[];
+  url?: string;
 };
 
 // Fusionner les blurDataURL dans les projets
 export const projects: Project[] = [
   {
     slug: "bingoobank-web",
-    title: "BingooBank Web",
+    title: "BingooBank",
     category: "Projet web",
     tags: ["Projet web"],
     featured: true,
+    url: "https://bingoobank.vercel.app/",
     images: [{ src: "/projet_web/bingoobank_landing_page.png", blur: "" }],
   },
   {
@@ -31,6 +33,7 @@ export const projects: Project[] = [
     category: "Application web",
     tags: ["Projet web", "Application web"],
     featured: true,
+    url: "https://fontdrop.vercel.app/",
     images: [{ src: "/projet_web/fontdrop_saas_landing_page.png", blur: "" }],
   },
   {
@@ -39,6 +42,7 @@ export const projects: Project[] = [
     category: "Projet web",
     tags: ["Projet web"],
     featured: true,
+    url: "https://startuper-io.vercel.app/",
     images: [{ src: "/projet_web/startuperio_landing_page.png", blur: "" }],
   },
   {
@@ -47,6 +51,7 @@ export const projects: Project[] = [
     category: "Projet web",
     tags: ["Projet web"],
     featured: true,
+    url: "https://sergeo02.github.io/formation_trading/",
     images: [{ src: "/projet_web/page_de_vente_trading.png", blur: "" }],
   },
   { 
