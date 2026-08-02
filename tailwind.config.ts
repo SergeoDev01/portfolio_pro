@@ -10,6 +10,7 @@ export default {
     extend: {
       fontFamily: { 
         company: ["var(--font-company)", "sans-serif"], 
+        sans: ["var(--font-sans)"],
       },
       colors: {
         primary: '#E6C200',

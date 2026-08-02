@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google"; // Using a placeholder for Satoshi if not available in google fonts, we'll use Geist instead
 import localFont from "next/font/local";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 const company = localFont({
   src: "../../public/fonts/company.otf",
   variable: "--font-company",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -25,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${geist.variable} ${company.variable}`}>
-      <body className="antialiased min-h-[100dvh]" suppressHydrationWarning>
+    <html lang="fr" className={`${company.variable} ${spaceGrotesk.variable}`}>
+      <body className="font-sans antialiased min-h-[100dvh]" suppressHydrationWarning>
         {children}
       </body>
     </html>
