@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import type { ProjectImage } from "@/data/projects";
 
 interface SimpleCarouselProps {
@@ -66,7 +66,16 @@ export function SimpleCarousel({
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [resolvedBg, setResolvedBg] = useState(bgColor ?? DEFAULT_BG);
+  const [isFirstImageLoaded, setIsFirstImageLoaded] = useState(false);
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+
+  // Si l'image est déjà en cache, on la marque comme chargée au montage
+  useEffect(() => {
+    const firstImg = imgRefs.current[0];
+    if (firstImg && (firstImg.complete || firstImg.naturalWidth > 0)) {
+      setIsFirstImageLoaded(true);
+    }
+  }, [images]);
 
   // Quand la couleur vient de l'extérieur et change, on la reflète
   useEffect(() => {
@@ -158,9 +167,12 @@ export function SimpleCarousel({
                 draggable={false}
                 onDragStart={(e) => e.preventDefault()}
                 onLoad={() => {
+                  if (i === 0) setIsFirstImageLoaded(true);
                   if (i === activeIndex) extractColor(i);
                 }}
-                className="absolute inset-0 w-full h-full object-contain object-center select-none"
+                className={`absolute inset-0 w-full h-full object-contain object-center select-none transition-opacity duration-300 ${
+                  isFirstImageLoaded ? "opacity-100" : "opacity-0"
+                }`}
                 loading="eager"
                 decoding="async"
               />
@@ -168,6 +180,16 @@ export function SimpleCarousel({
           ))}
         </div>
       </div>
+
+      {/* Loader spécifique au carrousel pour masquer les flashs blancs/noirs */}
+      {!isFirstImageLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-bg-tint)] z-30">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="w-8 h-8 text-[var(--color-accent)] animate-spin" />
+            <p className="text-xs text-[var(--color-dark)]/50 tracking-wide">Chargement des visuels...</p>
+          </div>
+        </div>
+      )}
 
       {/* Previous button */}
       {images.length > 1 && (

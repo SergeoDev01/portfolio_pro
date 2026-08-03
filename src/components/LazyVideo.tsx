@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useInView } from "@/hooks/useInView";
-import { Play } from "lucide-react";
+import { Play, Loader2 } from "lucide-react";
 
 type VideoOrientation = "landscape" | "portrait" | "square" | null;
 
@@ -24,6 +24,7 @@ export function LazyVideo({
   const { ref, inView } = useInView();
   const [playing, setPlaying] = useState(false);
   const [orientation, setOrientation] = useState<VideoOrientation>(null);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const metaVideoRef = useRef<HTMLVideoElement>(null);
 
   // Détecter l'orientation dès que la vidéo est dans le viewport
@@ -92,11 +93,24 @@ export function LazyVideo({
             autoPlay={playing}
             controls={playing}
             playsInline
-            className="w-full h-full object-contain"
+            onLoadedData={() => setIsVideoLoaded(true)}
+            className={`w-full h-full object-contain transition-opacity duration-300 ${
+              isVideoLoaded ? "opacity-100" : "opacity-0"
+            }`}
           />
 
-          {/* Bouton play custom — visible tant que pas en lecture */}
-          {!playing && (
+          {/* Loader spécifique à la vidéo */}
+          {!isVideoLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-bg-tint)] z-30">
+              <div className="flex flex-col items-center gap-3">
+                <Loader2 className="w-8 h-8 text-[var(--color-accent)] animate-spin" />
+                <p className="text-xs text-[var(--color-dark)]/50 tracking-wide">Chargement de la vidéo...</p>
+              </div>
+            </div>
+          )}
+
+          {/* Bouton play custom — visible tant que pas en lecture et vidéo chargée */}
+          {!playing && isVideoLoaded && (
             <button
               onClick={() => setPlaying(true)}
               className="absolute inset-0 flex items-center justify-center
