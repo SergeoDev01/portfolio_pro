@@ -5,6 +5,11 @@ import { BackButton } from "@/components/BackButton";
 import { SimpleCarousel } from "@/components/SimpleCarousel";
 import { LazyVideo } from "@/components/LazyVideo";
 
+// Force Next.js to pre-render these pages statically at build time
+export const dynamic = "force-static";
+// Ensure that any slug not generated in generateStaticParams returns a 404 immediately
+export const dynamicParams = false;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

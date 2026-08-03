@@ -51,7 +51,7 @@ export function VideoThumbnail({
     video.addEventListener("loadeddata", trySeek, { once: true });
     video.addEventListener("loadedmetadata", trySeek, { once: true });
 
-    video.preload = "auto";
+    video.preload = "metadata";
     video.load();
 
     return () => {
