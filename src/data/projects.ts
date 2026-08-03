@@ -12,6 +12,8 @@ export type Project = {
   featured: boolean;
   images: ProjectImage[];
   video?: string;
+  /** Chemin vers une image vignette statique (ex: extraite par scripts/generate-thumbnails.mjs) */
+  thumbnail?: string;
   tags?: string[];
   url?: string;
 };
@@ -109,6 +111,7 @@ export const projects: Project[] = [
     category: "Production IA",
     featured: true,
     video: "/video_pub/for-sure-pub.mp4",
+    thumbnail: "/thumbnails/for-sure-pub.webp",
     images: (blurData as any)["pub-for-sure"] ?? []
   },
   {
@@ -117,6 +120,7 @@ export const projects: Project[] = [
     category: "Production IA",
     featured: true,
     video: "/video_pub/mango-juice-pub.mp4",
+    thumbnail: "/thumbnails/mango-juice-pub.webp",
     images: (blurData as any)["pub-mango-juice"] ?? []
   },
   {
@@ -125,6 +129,7 @@ export const projects: Project[] = [
     category: "Production IA",
     featured: true,
     video: "/video_pub/ugc-pub.mp4",
+    thumbnail: "/thumbnails/ugc-pub.webp",
     images: (blurData as any)["pub-ugc"] ?? []
   },
 ];

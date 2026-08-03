@@ -3,7 +3,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 const APROPOS_PNG_RATIO = 816 / 1456;
-const HAND_LINE_PERCENT = 0.78;
+const HAND_LINE_PERCENT = 0.72;
 const DEV_POSITION = false; // ← false quand les valeurs sont trouvées
 
 export function AProposSection() {
@@ -12,7 +12,6 @@ export function AProposSection() {
   const [offset, setOffset] = useState({ x: 0, y: 200 }); // offset manuel DEV
   const [cardPaddingTop, setCardPaddingTop] = useState("2rem");
   const [padTop, setPadTop] = useState(440 * APROPOS_PNG_RATIO * HAND_LINE_PERCENT);
-  const [isMobile, setIsMobile] = useState(false);
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef({ mx: 0, my: 0, ox: 0, oy: 0 });
 
@@ -27,7 +26,6 @@ export function AProposSection() {
     setBasePos({ top: -overlapAbove, width: imgWidth, height: imgHeight });
     setCardPaddingTop(`${overlapBelow + 24}px`);
     setPadTop(Math.max(overlapAbove + 8, 8));
-    setIsMobile(window.innerWidth < 1024);
   }, []);
 
   useEffect(() => {
@@ -69,7 +67,7 @@ export function AProposSection() {
   return (
     <section id="a-propos" className="px-6 lg:px-12 pt-2 pb-4 lg:pt-4 lg:pb-6">
       <div ref={wrapperRef} className="relative max-w-4xl mx-auto"
-           style={{ paddingTop: isMobile ? `${padTop}px` : `${440 * APROPOS_PNG_RATIO * HAND_LINE_PERCENT}px` }}>
+           style={{ paddingTop: `${padTop}px` }}>
 
         {/* PNG draggable en DEV */}
         <Image
@@ -83,7 +81,7 @@ export function AProposSection() {
           onMouseDown={handleMouseDown}
           style={{
             position: "absolute",
-            top: isMobile ? (DEV_POSITION ? basePos.top + offset.y : 8) : basePos.top + offset.y,
+            top: DEV_POSITION ? basePos.top + offset.y : 8,
             left: "50%",
             transform: "translateX(-50%)",
             width: basePos.width,

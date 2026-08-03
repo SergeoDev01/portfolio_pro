@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { CheckCircle2, PaintBucket } from "lucide-react";
+import { PaintBucket } from "lucide-react";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -125,7 +126,7 @@ export function Sidebar() {
         </div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
           Sergeo Limta
-          <CheckCircle2 className="w-5 h-5 text-[var(--color-verified)]" />
+          <VerifiedBadge className="w-5 h-5" fill="var(--color-verified)" />
         </h1>
         <p className="text-sm text-gray-400 mt-1 text-center">Web Engineer & Prompt Engineer</p>
       </div>

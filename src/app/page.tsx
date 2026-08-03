@@ -6,7 +6,8 @@ import { Sidebar, navItems, getNavIcon } from "@/components/Sidebar";
 import { projects } from "@/data/projects";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Menu, X, PaintBucket, Pin } from "lucide-react";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { MoveUpRight, ArrowRight, Video, Menu, X, PaintBucket, Pin } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -29,6 +30,7 @@ function CustomEnvelope({ className }: { className?: string }) {
 import { LazyImage } from "@/components/LazyImage";
 import { LandingPreview } from "@/components/LandingPreview";
 import { featuredLandingProjects } from "@/data/landing-projects";
+import { VideoThumbnail } from "@/components/VideoThumbnail";
 
 const SPRING_CONFIG = { type: "spring", stiffness: 100, damping: 20 } as const;
 
@@ -316,7 +318,7 @@ export default function Home() {
             
             <h1 className="text-xl font-bold flex items-center gap-1.5 text-[var(--color-dark)]">
               Sergeo Limta
-              <CheckCircle2 className="w-4 h-4 text-[var(--color-verified)]" />
+              <VerifiedBadge className="w-5 h-5" fill="var(--color-verified)" />
             </h1>
             <p className="text-xs text-[var(--color-dark)]/70 font-medium">Web Engineer & Prompt Engineer</p>
           </div>
@@ -454,13 +456,28 @@ export default function Home() {
                         className="absolute inset-0 z-20"
                       />
                     )}
-                    <LazyImage 
-                      src={p.images && p.images.length > 0 ? p.images[0].src : `https://picsum.photos/seed/${p.slug}/800/600`} 
-                      alt={p.title} 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="absolute inset-0 w-full h-full"
-                      objectPosition={p.category === "Projet web" || p.category === "Application web" ? "top" : "center"}
-                    />
+                    {p.video ? (
+                      /* Vignette : image statique si disponible, sinon capture dynamique */
+                      <VideoThumbnail
+                        src={p.video}
+                        thumbnail={p.thumbnail}
+                        alt={p.title}
+                        className="absolute inset-0 w-full h-full"
+                        objectFit="cover"
+                        showPlayIcon={false}
+                      />
+                    ) : p.images && p.images.length > 0 ? (
+                      <LazyImage
+                        src={p.images[0].src}
+                        alt={p.title}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="absolute inset-0 w-full h-full"
+                        objectPosition={p.category === "Projet web" || p.category === "Application web" ? "top" : "center"}
+                      />
+                    ) : (
+                      /* Fallback neutre si aucun média */
+                      <div className="absolute inset-0 bg-[#1a1a1a]" />
+                    )}
                     
                     {/* Bottom Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-dark)]/90 via-[var(--color-dark)]/30 to-transparent flex flex-col justify-end p-4 lg:p-6 z-10">

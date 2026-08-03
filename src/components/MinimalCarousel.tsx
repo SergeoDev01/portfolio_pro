@@ -58,7 +58,6 @@ export function MinimalCarousel({ project, onClose }: MinimalCarouselProps) {
           <SimpleCarousel
             images={project.images}
             isLandscape={isLandscape}
-            bgColor="#111111"
           />
         </div>
       </div>

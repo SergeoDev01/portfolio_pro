@@ -56,7 +56,10 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const isVideo = !!project?.video;
-  const isLandscape = project?.slug === "parle-g-shooting" || isVideo;
+  // isLandscape pour les images seulement (cas parle-g-shooting)
+  const isImagesLandscape = project?.slug === "parle-g-shooting" && !isVideo;
+  // Orientation réelle de la vidéo (détectée via loadedmetadata)
+  const [videoOrientation, setVideoOrientation] = useState<"landscape" | "portrait" | "square" | null>(null);
 
   // Handle Escape key to close
   useEffect(() => {
@@ -76,11 +79,33 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
   // Reset state when project changes
   useEffect(() => {
     setBgColor("#111111");
+    setVideoOrientation(null); // reset orientation pour la nouvelle vidéo
     // Auto-play video when modal opens
     if (isVideo && videoRef.current) {
       videoRef.current.play().catch(() => {});
     }
   }, [project?.slug, isVideo]);
+
+  // Détecter l'orientation réelle de la vidéo
+  useEffect(() => {
+    if (!isVideo || !project?.video) return;
+    const vid = document.createElement("video");
+    vid.preload = "metadata";
+    vid.src = `${project.video}#t=0.1`;
+    vid.muted = true;
+    vid.addEventListener("loadedmetadata", () => {
+      const w = vid.videoWidth;
+      const h = vid.videoHeight;
+      if (w > 0 && h > 0) {
+        const ratio = w / h;
+        if (ratio > 1.1) setVideoOrientation("landscape");
+        else if (ratio < 0.9) setVideoOrientation("portrait");
+        else setVideoOrientation("square");
+      }
+      vid.src = "";
+    });
+    vid.load();
+  }, [project?.video, isVideo]);
 
   // Extract dominant color whenever active image changes
   const updateColor = useCallback(async (src: string) => {
@@ -142,7 +167,13 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               className={`relative w-full bg-[var(--color-dark)] lg:rounded-[var(--radius-card)] overflow-hidden shadow-2xl flex flex-col justify-center pointer-events-auto ${
-                isLandscape
+                isVideo
+                  ? videoOrientation === "portrait"
+                    ? "h-[100dvh] lg:h-auto lg:aspect-[9/16] lg:max-w-[380px]"
+                    : videoOrientation === "square"
+                    ? "h-[100dvh] lg:h-auto lg:aspect-square lg:max-w-[600px]"
+                    : "h-[100dvh] lg:h-auto lg:aspect-video lg:max-w-[900px]"
+                  : isImagesLandscape
                   ? "h-[100dvh] lg:h-auto lg:aspect-video lg:max-w-[900px]"
                   : "h-[100dvh] lg:h-auto lg:aspect-square lg:max-w-[600px]"
               }`}
