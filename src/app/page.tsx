@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Sidebar, navItems, getNavIcon } from "@/components/Sidebar";
 import { projects } from "@/data/projects";
@@ -468,28 +469,28 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={SPRING_CONFIG}
-                    onMouseEnter={() => {
-                      // Précharger la page au survol pour qu'elle soit instantanée au clic
-                      if (!p.url) router.prefetch(`/projets/${p.slug}`);
-                    }}
-                    onClick={() => {
-                      if (!p.url) {
-                        // Démarrer la barre de progression immédiatement
-                        if (typeof window !== "undefined" && (window as any).__startNavProgress) {
-                          (window as any).__startNavProgress();
-                        }
-                        // Sauvegarder la position avant de quitter
-                        sessionStorage.setItem("homeScrollY", String(window.scrollY));
-                        router.push(`/projets/${p.slug}`);
-                      }
-                    }}
                     className="relative overflow-hidden rounded-[var(--radius-card)] group cursor-pointer shadow-sm hover:shadow-xl transition-shadow bg-black col-span-1 aspect-square"
                   >
-                    {p.url && (
+                    {p.url ? (
                       <a
                         href={p.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label={`Ouvrir ${p.title}`}
+                        className="absolute inset-0 z-20"
+                      />
+                    ) : (
+                      <Link
+                        href={`/projets/${p.slug}`}
+                        prefetch={true}
+                        onClick={() => {
+                          // Démarrer la barre de progression immédiatement
+                          if (typeof window !== "undefined" && (window as any).__startNavProgress) {
+                            (window as any).__startNavProgress();
+                          }
+                          // Sauvegarder la position avant de quitter
+                          sessionStorage.setItem("homeScrollY", String(window.scrollY));
+                        }}
                         aria-label={`Ouvrir ${p.title}`}
                         className="absolute inset-0 z-20"
                       />
