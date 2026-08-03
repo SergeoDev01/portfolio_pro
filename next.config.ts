@@ -18,10 +18,13 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2592000,
   },
   compress: true,
-  // Désactiver le scroll automatique vers le haut lors des navigations
-  // afin de laisser notre logique manuelle (sessionStorage) prendre le relais
+  // Configuration expérimentale pour le cache et la restauration du scroll
   experimental: {
     scrollRestoration: true,
+    staleTimes: {
+      dynamic: 300, // cache les pages dynamiques pendant 5 min côté client
+      static: 300,  // cache les pages statiques pendant 5 min côté client
+    },
   },
 };
 
