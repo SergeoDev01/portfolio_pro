@@ -484,10 +484,6 @@ export default function Home() {
                         href={`/projets/${p.slug}`}
                         prefetch={true}
                         onClick={() => {
-                          // Démarrer la barre de progression immédiatement
-                          if (typeof window !== "undefined" && (window as any).__startNavProgress) {
-                            (window as any).__startNavProgress();
-                          }
                           // Sauvegarder la position avant de quitter
                           sessionStorage.setItem("homeScrollY", String(window.scrollY));
                         }}

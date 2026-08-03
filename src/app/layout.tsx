@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Space_Grotesk } from "next/font/google";
-import { NavigationProgress } from "@/components/NavigationProgress";
 import "./globals.css";
 
 const company = localFont({
@@ -29,7 +28,6 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${company.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased min-h-[100dvh]" suppressHydrationWarning>
-        <NavigationProgress />
         {children}
       </body>
     </html>
