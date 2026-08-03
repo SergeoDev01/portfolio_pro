@@ -204,7 +204,7 @@ export function ProjectCarousel({ project, onClose }: ProjectCarouselProps) {
                 /* IMAGE CAROUSEL MODE */
                 <SimpleCarousel
                   images={images}
-                  isLandscape={isLandscape}
+                  isLandscape={isImagesLandscape}
                   bgColor={bgColor}
                   onIndexChange={handleIndexChange}
                 />
