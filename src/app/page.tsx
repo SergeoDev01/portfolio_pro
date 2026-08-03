@@ -392,7 +392,7 @@ export default function Home() {
                 <motion.div
                   key={p.slug}
                   layout
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={false}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={SPRING_CONFIG}
@@ -465,7 +465,7 @@ export default function Home() {
                   <motion.div
                     key={p.slug}
                     layout
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={false}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={SPRING_CONFIG}

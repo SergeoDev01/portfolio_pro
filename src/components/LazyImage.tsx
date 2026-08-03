@@ -1,6 +1,4 @@
-"use client";
 import Image from "next/image";
-import { useInView } from "@/hooks/useInView";
 
 export function LazyImage({
   src,
@@ -17,25 +15,21 @@ export function LazyImage({
   sizes?: string;
   objectPosition?: string;
 }) {
-  const { ref, inView } = useInView();
-
   return (
-    <div ref={ref} className={`relative overflow-hidden ${className}`}>
-      {(inView || priority) && (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes={sizes}
-          quality={80}
-          priority={priority}
-          loading={priority ? "eager" : "lazy"}
-          className="object-cover"
-          style={{ objectPosition }}
-          draggable={false}
-          onDragStart={(e) => e.preventDefault()}
-        />
-      )}
+    <div className={`relative overflow-hidden ${className}`}>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes}
+        quality={80}
+        priority={priority}
+        loading={priority ? "eager" : "lazy"}
+        className="object-cover"
+        style={{ objectPosition }}
+        draggable={false}
+        onDragStart={(e) => e.preventDefault()}
+      />
     </div>
   );
 }
