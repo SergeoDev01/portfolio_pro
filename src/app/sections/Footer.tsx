@@ -5,7 +5,7 @@ import { CopyEmail } from "@/components/CopyEmail";
 
 export default function Footer() {
   return (
-    <footer className="mx-4 mb-4 rounded-3xl bg-[#1D0101] overflow-hidden">
+    <footer id="contact" className="mx-4 mb-4 rounded-3xl bg-[#1D0101] overflow-hidden">
       {/* Zone principale — padding généreux et équilibré */}
       <div className="px-10 lg:px-14 pt-12 pb-10">
         {/* Ligne haute : titre gauche / CTA droite */}
@@ -44,7 +44,6 @@ export default function Footer() {
 
         {/* Description — pleine largeur, sous le bloc titre/CTA */}
         <p className="text-white/35 text-sm leading-relaxed max-w-md mb-10">
-          Web engineer & prompt engineer basé à Lomé, Togo.
           Spécialisé dans la création de sites web, portfolios, applications web & desktop, et production de contenu assistée par IA.
         </p>
 

@@ -1,6 +1,6 @@
 "use client";
 
-const WHATSAPP_URL = `https://wa.me/22896564590?text=${encodeURIComponent(
+export const WHATSAPP_URL = `https://wa.me/22896564590?text=${encodeURIComponent(
   "Bonjour Sergeo, j'ai vu votre portfolio et j'aimerais discuter d'un projet avec vous."
 )}`;
 

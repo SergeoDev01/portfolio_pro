@@ -91,17 +91,39 @@ export function Sidebar() {
   useEffect(() => {
     const handleScroll = () => {
       const sections = navItems.map((item) => item.href.substring(1));
-      let current = "";
+      
+      // Cas spécial : si on est tout en bas de la page, activer "contact"
+      const isAtBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80;
+      if (isAtBottom) {
+        setActiveSection("contact");
+        return;
+      }
+
+      // Cas spécial : si le footer#contact est visible dans le viewport
+      const contactEl = document.getElementById("contact");
+      if (contactEl) {
+        const contactRect = contactEl.getBoundingClientRect();
+        if (contactRect.top < window.innerHeight && contactRect.bottom > 0) {
+          setActiveSection("contact");
+          return;
+        }
+      }
+
+      // Logique standard pour les autres sections
+      let current = "accueil";
       for (const section of sections) {
+        if (section === "contact") continue; // déjà géré au-dessus
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
           if (rect.top <= 150) current = section;
         }
       }
-      if (current) setActiveSection(current);
+      setActiveSection(current);
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -109,7 +131,15 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-screen w-80 bg-[var(--color-dark)] text-white hidden lg:flex flex-col z-50">
       {/* Banner */}
-      <div className="w-full h-[120px] bg-[var(--color-primary)] shrink-0" />
+      <div className="w-full h-[120px] bg-[var(--color-primary)] shrink-0 relative">
+        <Image 
+          src="/banner.png" 
+          alt="Banner" 
+          fill 
+          priority
+          className="object-cover opacity-90" 
+        />
+      </div>
 
       <div className="relative flex flex-col items-center px-6 pb-6">
         {/* Avatar overlapping the banner */}

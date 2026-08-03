@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2592000,
   },
   compress: true,
+  // Désactiver le scroll automatique vers le haut lors des navigations
+  // afin de laisser notre logique manuelle (sessionStorage) prendre le relais
+  experimental: {
+    scrollRestoration: true,
+  },
 };
 
 export default nextConfig;

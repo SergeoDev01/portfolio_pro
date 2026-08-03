@@ -7,6 +7,7 @@ import { projects } from "@/data/projects";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { CallToActionPopup } from "@/components/CallToActionPopup";
 import { MoveUpRight, ArrowRight, Video, Menu, X, PaintBucket, Pin } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -218,8 +219,22 @@ export default function Home() {
     return () => { document.body.style.overflow = 'unset'; };
   }, [isMobileMenuOpen]);
 
+  // Restaurer la position de scroll après retour depuis une page projet
+  useEffect(() => {
+    const savedY = sessionStorage.getItem("homeScrollY");
+    if (savedY) {
+      // On supprime immédiatement pour ne pas s'en resservir lors d'un F5
+      sessionStorage.removeItem("homeScrollY");
+      // Petit délai pour laisser le DOM se rendre
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: parseInt(savedY, 10), behavior: "instant" });
+      });
+    }
+  }, []);
+
   return (
     <div className="min-h-[100dvh] bg-[var(--color-bg-tint)] font-sans">
+        <CallToActionPopup />
         
         {/* Floating Hamburger Button for Mobile */}
       <button 
@@ -248,9 +263,12 @@ export default function Home() {
               transition={SPRING_CONFIG}
               className="fixed top-0 left-0 w-full bg-[var(--color-dark)] text-white z-50 flex flex-col max-h-[100dvh] overflow-y-auto lg:hidden rounded-b-3xl shadow-2xl border-b border-white/10"
             >
-              <div className="flex items-center justify-between px-4 h-14 shrink-0">
+              <div className="flex items-center justify-between px-6 pt-6 pb-2 shrink-0">
                 <span className="font-bold text-lg">Menu</span>
-                <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 -mr-2 text-white hover:text-[var(--color-accent)] transition-colors">
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)} 
+                  className="fixed top-4 right-4 z-[60] bg-[var(--color-dark)] text-white p-2.5 rounded-full hover:text-[var(--color-accent)] transition-all"
+                >
                   <X className="w-6 h-6" />
                 </button>
               </div>
@@ -301,7 +319,15 @@ export default function Home() {
         
         {/* MOBILE HERO (visible only < lg) */}
         <section className="lg:hidden flex flex-col items-center pb-6">
-          <div className="w-full h-[100px] bg-[var(--color-primary)] shrink-0"></div>
+          <div className="w-full h-[100px] bg-[var(--color-primary)] shrink-0 relative">
+            <Image 
+              src="/banner.png" 
+              alt="Banner" 
+              fill 
+              priority
+              className="object-cover opacity-90" 
+            />
+          </div>
           
           <div className="relative flex flex-col items-center px-4 w-full">
             <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-transparent ring-4 ring-[var(--color-dark)] -mt-12 mb-3 relative bg-gray-200 z-10 shrink-0">
@@ -335,7 +361,7 @@ export default function Home() {
               <MarkerHighlight color="#FFD700">performants.</MarkerHighlight> 
             </h1> 
             <p className="text-center text-[#1D0101]/60 max-w-xl mx-auto mt-4 mb-3 lg:mb-6 leading-relaxed"> 
-              Web engineer et prompt engineer basé à Lomé, spécialisé dans la création de sites web, portfolios, applications web & desktop, et la production de contenu assistée par IA.
+              Web engineer et prompt engineer spécialisé dans la création de sites web, portfolios, applications web & desktop, et la production de contenu assistée par IA.
             </p>
             
             <div className="flex flex-wrap gap-2 justify-center mt-6 mb-6">
@@ -443,7 +469,11 @@ export default function Home() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={SPRING_CONFIG}
                     onClick={() => {
-                      if (!p.url) router.push(`/projets/${p.slug}`);
+                      if (!p.url) {
+                        // Sauvegarder la position avant de quitter
+                        sessionStorage.setItem("homeScrollY", String(window.scrollY));
+                        router.push(`/projets/${p.slug}`);
+                      }
                     }}
                     className="relative overflow-hidden rounded-[var(--radius-card)] group cursor-pointer shadow-sm hover:shadow-xl transition-shadow bg-black col-span-1 aspect-square"
                   >
