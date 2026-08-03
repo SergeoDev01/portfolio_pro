@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { projects } from "@/data/projects";
+import { BackButton } from "@/components/BackButton";
 import { SimpleCarousel } from "@/components/SimpleCarousel";
 import { LazyVideo } from "@/components/LazyVideo";
 
@@ -35,13 +34,7 @@ export default async function ProjectPage({ params }: PageProps) {
     <div className="h-[100dvh] flex flex-col overflow-hidden bg-[var(--color-bg-tint)] font-sans">
       {/* Top bar */}
       <header className="flex items-center justify-between px-6 lg:px-12 h-16 lg:h-20 border-b border-[#1D0101]/10 shrink-0">
-        <Link
-          href="/#projets"
-          className="flex items-center gap-2 text-sm font-semibold text-[#1D0101]/70 hover:text-[var(--color-accent)] transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Retour aux projets
-        </Link>
+        <BackButton />
         <span className="font-company font-bold text-[#1D0101]">Sergeo Limta</span>
       </header>
 

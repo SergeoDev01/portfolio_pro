@@ -468,8 +468,16 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={SPRING_CONFIG}
+                    onMouseEnter={() => {
+                      // Précharger la page au survol pour qu'elle soit instantanée au clic
+                      if (!p.url) router.prefetch(`/projets/${p.slug}`);
+                    }}
                     onClick={() => {
                       if (!p.url) {
+                        // Démarrer la barre de progression immédiatement
+                        if (typeof window !== "undefined" && (window as any).__startNavProgress) {
+                          (window as any).__startNavProgress();
+                        }
                         // Sauvegarder la position avant de quitter
                         sessionStorage.setItem("homeScrollY", String(window.scrollY));
                         router.push(`/projets/${p.slug}`);
