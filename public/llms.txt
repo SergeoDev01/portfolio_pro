@@ -1,0 +1,59 @@
+# Sergeo Limta
+
+> Développeur web freelance & designer créatif basé à Lomé, Togo.
+> Connu sous le nom "Le Geek Créatif".
+> Spécialisé en sites web sur-mesure, UI/UX design, applications web & desktop (Next.js, Tauri),
+> branding, direction artistique et production de contenu IA.
+
+## À propos
+
+Sergeo Limta est un développeur web et designer créatif togolais, actif sous la marque
+**Le Geek Créatif**. Il conçoit des expériences web performantes et des visuels de haute qualité
+pour des clients et projets en Afrique et à l'international.
+
+## Services
+
+- **Sites web sur-mesure** : Vitrine, portfolio, landing page (React · Next.js)
+- **UI/UX Design** : Web, mobile, prototypage haute fidélité
+- **Applications web & desktop** : React · Next.js · Tauri
+- **Branding** : Identité visuelle, logo, charte graphique
+- **Direction artistique** : Shooting produit, mise en scène visuelle
+- **Production IA** : Génération d'images, vidéos publicitaires et contenu assisté par IA
+
+## Projets réalisés
+
+- [BingooBank (site web)](https://sergeo-limta-portfolio.vercel.app/projets/bingoobank-web): Landing page pour une fintech fictive
+- [Fontdrop (app web)](https://sergeo-limta-portfolio.vercel.app/projets/fontdrop): SaaS de gestion de polices de caractères
+- [Startuperio](https://sergeo-limta-portfolio.vercel.app/projets/startuperio): Landing page startup
+- [Page de vente Trading](https://sergeo-limta-portfolio.vercel.app/projets/formation-trading): Tunnel de vente pour formation
+- [BingooBank (branding)](https://sergeo-limta-portfolio.vercel.app/projets/bingoobank): Identité visuelle complète
+- [Aéron Logo](https://sergeo-limta-portfolio.vercel.app/projets/aeron-logo): Design de logo
+- [QDA (UI/UX)](https://sergeo-limta-portfolio.vercel.app/projets/qda): Interface utilisateur
+- [Skin Care Shooting](https://sergeo-limta-portfolio.vercel.app/projets/skin-care-shooting): Direction artistique produit
+- [Parle G Shooting](https://sergeo-limta-portfolio.vercel.app/projets/parle-g-shooting): Production IA paysage
+- [AI Shooting Pro](https://sergeo-limta-portfolio.vercel.app/projets/ai-shooting-pro): Production IA avancée
+- [For Sure — Pub](https://sergeo-limta-portfolio.vercel.app/projets/pub-for-sure): Vidéo publicitaire IA
+- [Mango Juice — Pub](https://sergeo-limta-portfolio.vercel.app/projets/pub-mango-juice): Vidéo publicitaire IA
+- [UGC — Pub](https://sergeo-limta-portfolio.vercel.app/projets/pub-ugc): Vidéo UGC IA
+
+## Pages du portfolio
+
+- [Accueil](https://sergeo-limta-portfolio.vercel.app): Présentation, services et projets en avant
+- [Projets complets](https://sergeo-limta-portfolio.vercel.app/#projets): Galerie de tous les projets
+- [À propos](https://sergeo-limta-portfolio.vercel.app/#a-propos): Parcours et compétences
+- [Contact](https://sergeo-limta-portfolio.vercel.app/#contact): Prise de contact
+
+## Contact & Liens
+
+- Site : https://sergeo-limta-portfolio.vercel.app
+- GitHub : https://github.com/Sergeo02
+- GitHub (pro) : https://github.com/SergeoDev01
+- Localisation : Lomé, Togo 🇹🇬
+
+## Stack technique
+
+Next.js · React · TypeScript · Tailwind CSS · Framer Motion · Tauri · Figma · Adobe Suite
+
+## Langues
+
+Français (natif) · Anglais (professionnel)

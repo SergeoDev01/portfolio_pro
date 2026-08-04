@@ -18,13 +18,37 @@ export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
+const BASE_URL = "https://sergeo-limta-portfolio.vercel.app";
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) return { title: "Projet introuvable" };
+
+  const title = `${project.title} — Sergeo Limta`;
+  const description = `${project.title} — ${project.category} réalisé par Sergeo Limta (Le Geek Créatif), développeur web & designer créatif basé à Lomé, Togo.`;
+  const image = project.thumbnail ?? project.images?.[0]?.src ?? "/og-image.jpg";
+  const canonicalUrl = `${BASE_URL}/projets/${slug}`;
+
   return {
-    title: `${project.title} — Sergeo Limta`,
-    description: `${project.title} · ${project.category} — Portfolio de Sergeo Limta`,
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: "Sergeo Limta — Le Geek Créatif",
+      images: [{ url: image, alt: `${project.title} par Sergeo Limta` }],
+      locale: "fr_FR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
   };
 }
 
