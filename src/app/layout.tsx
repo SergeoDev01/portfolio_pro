@@ -87,6 +87,9 @@ export const metadata: Metadata = {
     canonical: BASE_URL,
   },
   category: "portfolio",
+  verification: {
+    google: "eAY8xeVfhTdfgc_u_YPivxjxmNQYaKqrjZ6bgktF6bs",
+  },
 };
 
 // JSON-LD Schema — Person (pour que Google t'associe à ton nom)
